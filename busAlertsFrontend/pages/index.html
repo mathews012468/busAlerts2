@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" defer>
+            function clickedOnBusStop(busStopElement) {
+                //add the name of bus stop to the text of the element with id busStop
+                //set the name attribute of that element to the bus stop code
+                //jump to the bottom of the page where the rest of the info needs to get entered
+                chosenStopElement = document.getElementById("busStop")
+                chosenStopElement.setAttribute("name", busStopElement.id)
+                chosenStopElement.textContent = "Bus Stop: "
+                chosenStopElement.textContent += busStopElement.textContent
+                
+                let busStopInputElement = document.getElementById("busStopID")
+                busStopInputElement.value = busStopElement.id
+                document.getElementById("busStop").scrollIntoView({behavior: 'smooth'});
+            }
+
+            function verifyBusLine() {
+                const commonBusName = document.getElementById("busCommonName").value
+
+                const url = `http://0.0.0.0:10000/getbusstops?commonName=${commonBusName}`
+                fetch(url, {
+                    method: "GET"
+                }).then( response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error: ${response.status}`)
+                    }
+                    return response.json()
+                }).then( jsonData => {
+                    //add the name of the bus to the text of the element with id busLine
+                    //set the name attribute of that element to the busLineID
+                    let busLineElement = document.getElementById("busLine")
+                    busLineElement.setAttribute("name", jsonData["busLineID"])
+                    busLineElement.textContent = "Bus Line: "
+                    busLineElement.textContent += commonBusName
+                    
+                    let busLineInputElement = document.getElementById("busLineID")
+                    busLineInputElement.value = jsonData["busLineID"]
+                    delete jsonData["busLineID"]
+
+                    const stopsElement = document.getElementById("stops")
+                    stopsElement.innerHTML = ""
+                    Object.keys(jsonData).forEach((destination => {
+                        stopsElement.innerHTML += `<div id="${destination}">${destination}</div>`
+                        for (let i = 0; i < jsonData[destination].length; i++) {
+                            const destinationElement = document.getElementById(destination)
+                            let code = jsonData[destination][i].code
+                            let name = jsonData[destination][i].name
+                            destinationElement.innerHTML += `<li id="${code}" onclick="clickedOnBusStop(this)">${name}</li>` 
+                        }
+                        stopsElement.innerHTML += "<br>"
+                    }))
+                })
+            }
+        </script>
+    </head>
+    <body>
+            <div>
+                <input type="text" id="busCommonName" name="busCommonName" placeholder="Bus Common Name" required></input>
+            </div>
+            <div>
+                <button onclick="verifyBusLine()">Submit</button>
+            </div><br>
+            <div id="stops"></div><br>
+            <div id="busLine">Bus Line: </div>
+            <div id="busStop">Bus Stop: </div>
+            <form action="/alert" method="post">
+                <input type="text" name="busLineID" placeholder="Bus Line" id="busLineID" required><br>
+                <input type="text" name="busStopID" placeholder="Bus Stop" id="busStopID" required><br>
+                <input type="number" name="number" min="1" placeholder="Number" required>
+                    <input type="radio" id="minutes" name="units" value="minutes" checked>
+                    <label for="minutes">minutes</label>
+                    <input type="radio" id="bus stops" name="units" value="bus stops">
+                    <label for="bus stops">bus stops</label><br>
+                <input type="email" name="email" placeholder="Email Address" required><br>
+                <button type="submit">Set up alert</button> 
+            </form>        
+    </body>
+</html>
