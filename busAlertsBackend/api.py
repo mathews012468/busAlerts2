@@ -3,6 +3,7 @@ from flask import request
 from flask_cors import CORS
 from . import busAlertScraper as bas
 from multiprocessing import Process
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -38,8 +39,8 @@ def setUpAlerts():
     alert = bas.BusAlert(busStopID, busLineID, email, number, units)
     p = Process(target=alert.setupAlerts)
     p.start()
-    return """Alert set up successfully!
-<form action="http://0.0.0.0:3000/" method="get">
+    return f"""Alert set up successfully!
+<form action="http://{os.environ["IP_ADDRESS"]}:{os.environ["FRONTEND_PORT"]}/" method="get">
     <button>Return to home</button>
 </form>""", 200
 
