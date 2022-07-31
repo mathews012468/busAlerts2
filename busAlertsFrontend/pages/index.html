@@ -21,7 +21,7 @@
         function verifyBusLine() {
             const commonBusName = document.getElementById("busCommonName").value
 
-            const url = `http://0.0.0.0:10000/getbusstops?commonName=${commonBusName}`
+            const url = `/getbusstops?commonName=${commonBusName}`
             fetch(url, {
                 method: "GET"
             }).then(response => {
