@@ -5,6 +5,8 @@ from datetime import datetime
 import yagmail #send email with just a subject and body text easily
 from enum import Enum
 import csv
+import os
+from twilio.rest import Client
 
 #TODO: incorporate logging into the project
 #get API key as environment variable
@@ -13,12 +15,18 @@ class Units(Enum):
     BUS_STOPS = "stops"
     MINUTES = "minutes"
 
+class MissingValueError(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
 class BusAlert:
-    API_KEY = "8127ca5e-2293-444b-b56e-a41d79604969"
+    API_KEY = os.environ["MTA_API_KEY"]
     BUS_ROUTES_FILE_PATH = "staticMtaInfo/busRoutes.csv"
     BUS_STOPS_FILE_PATH = "staticMtaInfo/stopsByRoute"
 
-    def __init__(self, busStopID, busLineID, email, number=5, units=Units.MINUTES):
+    def __init__(self, busStopID, busLineID, number=5, units=Units.MINUTES, email=None, phone=None):
+        if email == "" and phone == "":
+            raise MissingValueError("Email and phone number are missing: at least one must be provided.")
         if not BusAlert.isValidBusLine(busLineID):
             raise ValueError("Bus line ID is not valid.")
         if not BusAlert.isValidBusStop(busStopID, busLineID):
@@ -26,6 +34,7 @@ class BusAlert:
         self.busStopID = busStopID
         self.busLineID = busLineID
         self.recipientEmail = email
+        self.recipientPhone = phone
         self.number = number
         self.units = units
 
@@ -92,7 +101,7 @@ class BusAlert:
 
         return timeUntilBusArrives, numberOfStopsAway
 
-    def sendEmailIfBusIsClose(self, busArrivalDistance, busAlertDistance):
+    def sendAlertIfBusIsClose(self, busArrivalDistance, busAlertDistance):
         """
         If the bus is close enough, send an email alerting the user.
 
@@ -109,18 +118,37 @@ class BusAlert:
             return False
 
         msg = f"{BusAlert.busLineIdToCommonName(self.busLineID)} is less than {self.number} {self.units.value} away from {BusAlert.busStopIdToCommonName(self.busStopID, self.busLineID)}!"
+        if self.recipientEmail != "":
+            self.sendEmail(msg)
+        if self.recipientPhone != "":
+            self.sendText(msg)
+        return True
+
+    def sendEmail(self, msg):
         me = "nycbusalerts@gmail.com"
         yag = yagmail.SMTP(me, "qupxvewoewdgsmee")
         yag.send(self.recipientEmail, subject="Bus Alert", contents=msg)
 
         print("email sent", self.busLineID, self.busStopID, self.recipientEmail)
-        return True
+    
+    def sendText(self, msg):
+        account_sid = os.environ["TWILIO_ACCOUNT_SID"]
+        auth_token = os.environ["TWILIO_AUTH_TOKEN"]
+        client = Client(account_sid, auth_token)
+
+        message = client.messages \
+                        .create(
+                            body=msg,
+                            from_='+13474921832',
+                            to=self.recipientPhone
+                        )
 
     def setupAlerts(self):
         """
         Query the location of the nearest bus every few seconds and send
         an email if the bus gets close enough to the desired stop.
         """
+        print("setupAlerts before while")
         while True:
             timeUntilBusArrives, numberOfStopsAway = self.getClosestBus()
             if (timeUntilBusArrives, numberOfStopsAway) == (None, None):
@@ -130,11 +158,11 @@ class BusAlert:
 
             if self.units == Units.MINUTES:
                 secondsUntilAlertIsSent = self.number*60
-                if self.sendEmailIfBusIsClose(timeUntilBusArrives, secondsUntilAlertIsSent):
+                if self.sendAlertIfBusIsClose(timeUntilBusArrives, secondsUntilAlertIsSent):
                     break
             else:
                 busStopsUntilAlertIsSent = self.number
-                if self.sendEmailIfBusIsClose(numberOfStopsAway, busStopsUntilAlertIsSent):
+                if self.sendAlertIfBusIsClose(numberOfStopsAway, busStopsUntilAlertIsSent):
                     break
             
             time.sleep(15)

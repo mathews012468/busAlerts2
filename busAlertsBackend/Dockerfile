@@ -13,4 +13,6 @@ ENV FRONTEND_PORT 80
 
 ENV IP_ADDRESS 0.0.0.0
 
+RUN eval $(cat .env)
+
 CMD [ "flask", "run", "--host", "0.0.0.0"]

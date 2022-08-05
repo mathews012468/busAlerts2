@@ -8,16 +8,21 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-#message: {"busStopID":, "busLineID":, "number": , "units": , "email": } (number is 1-20, units is "stops" or "minutes")
+#message: {"busStopID":, "busLineID":, "number": , "units": , "email": , "phone":} (number is 1-20, units is "stops" or "minutes")
 @app.route('/alert', methods=["POST"])
 def setUpAlerts():
     #busStopID, busLineID, and email are all required in order to move forward
     try:
         busStopID = request.form["busStopID"]
         busLineID = request.form["busLineID"]
-        email = request.form["email"]
     except KeyError:
-        return "One of the following necessary pieces of information is missing: the bus line (busLineID), the bus stop (busStopID), the email address (email).", 400
+        return "One of the following necessary pieces of information is missing: the bus line (busLineID) or the bus stop (busStopID)", 400
+
+    #I probably should verify that at least one is provided
+    email = request.form.get("email")
+    phone = request.form.get("phone")
+    if email == "" and phone == "":
+        return "Email and phone number are missing: at least one must be provided", 400
 
     #if user doesn't supply a unit, assume it's minutes
     try:
@@ -36,9 +41,12 @@ def setUpAlerts():
         number = 5
 
     #start separate process for new request
-    alert = bas.BusAlert(busStopID, busLineID, email, number, units)
+    alert = bas.BusAlert(busStopID, busLineID, number, units, email=email, phone=phone)
+    print(alert.busStopID, alert.busLineID, alert.number, alert.units, alert.recipientEmail, alert.recipientPhone)
     p = Process(target=alert.setupAlerts)
+    print("after init process")
     p.start()
+    print("after begin process")
     return f"""Alert set up successfully!
 <form action="http://{os.environ["IP_ADDRESS"]}:{os.environ["FRONTEND_PORT"]}/" method="get">
     <button>Return to home</button>
