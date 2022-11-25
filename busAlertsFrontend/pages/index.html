@@ -56,6 +56,20 @@
             })
         }
 
+        //must have at least one of the following: phone number, email address
+        function hasUserProvidedContact() {
+            //all of these keys come from the name attribute
+            let alertForm = document.forms["alert"]
+            phoneNumber = alertForm["phone"].value
+            email = alertForm["email"].value
+            if ((phoneNumber != "") || (email != "")) {
+                return true
+            } else {
+                alert("Must provide either a phone number or an email address")
+                return false
+            }
+        }
+
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
@@ -161,7 +175,7 @@
         <div id="stops"></div><br>
         <h5 style="color:rgb(12, 71, 129);" id="busLine">Bus Line: </h3>
             <h5 style="color:rgb(12, 71, 129);" id="busStop">Bus Stop: </h5>
-            <form action="/alert" id="alert-form" method="post">
+            <form action="/alert" onsubmit="return hasUserProvidedContact()" id="alert-form" name="alert" method="post">
                 <div class="input-section">
                     <input class="textbox" type="text" name="busLineID" placeholder="Bus Line" id="busLineID" required readonly>
                 </div>
