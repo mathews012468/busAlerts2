@@ -150,15 +150,15 @@
         <h5 style="color:rgb(12, 71, 129);" id="busLine">Bus Line: </h3>
             <h5 style="color:rgb(12, 71, 129);" id="busStop">Bus Stop: </h5>
             <form action="/alert" method="post">
-                <input class="textbox" type="text" name="busLineID" placeholder="Bus Line" id="busLineID" required><br>
-                <input class="textbox" type="text" name="busStopID" placeholder="Bus Stop" id="busStopID" required><br>
-                <input class="textbox" type="number" name="number" min="1" placeholder="Number" required>
+                <input class="textbox" type="text" name="busLineID" placeholder="Bus Line" id="busLineID" required readonly><br>
+                <input class="textbox" type="text" name="busStopID" placeholder="Bus Stop" id="busStopID" required readonly><br>
+                <input class="textbox" type="number" name="number" min="1" pattern="^\d+$" title="must be a positive whole number" placeholder="Number" required>
                 <input type="radio" id="minutes" name="units" value="minutes" checked>
                 <label for="minutes">minutes</label>
                 <input type="radio" id="bus stops" name="units" value="bus stops">
                 <label for="bus stops">bus stops</label><br>
                 <!-- add back the required for phone and email later!!!! -->
-                <input class="textbox" type="tel" name="phone" placeholder="Phone Number" ><br>
+                <input class="textbox" type="tel" name="phone" placeholder="Phone Number" pattern="^\+1\d{10}$" title="Phone numbers must begin with +1 followed by the ten digits of the number (area code then seven digits). No spaces and other special characters like parentheses ()."><br>
                 <input class="textbox" type="email" name="email" placeholder="Email Address" ><br>
                 <button class="buttonstyle" type="submit">Set up alert</button>
             </form>
