@@ -132,6 +132,18 @@
             color: blue;
             text-decoration: underline;
         }
+
+        #alert-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            row-gap: 20px;
+            align-items: center;
+        }
+
+        #submit-alert {
+            grid-column: 1 / 3;
+            justify-self: center;
+        }
     </style>
     <div class="content">
         <h1 style="color:rgb(12, 71, 129);">MTA Bus Alerts</h1><br>
@@ -149,18 +161,36 @@
         <div id="stops"></div><br>
         <h5 style="color:rgb(12, 71, 129);" id="busLine">Bus Line: </h3>
             <h5 style="color:rgb(12, 71, 129);" id="busStop">Bus Stop: </h5>
-            <form action="/alert" method="post">
-                <input class="textbox" type="text" name="busLineID" placeholder="Bus Line" id="busLineID" required readonly><br>
-                <input class="textbox" type="text" name="busStopID" placeholder="Bus Stop" id="busStopID" required readonly><br>
-                <input class="textbox" type="number" name="number" min="1" pattern="^\d+$" title="must be a positive whole number" placeholder="Number" required>
-                <input type="radio" id="minutes" name="units" value="minutes" checked>
-                <label for="minutes">minutes</label>
-                <input type="radio" id="bus stops" name="units" value="bus stops">
-                <label for="bus stops">bus stops</label><br>
+            <form action="/alert" id="alert-form" method="post">
+                <div class="input-section">
+                    <input class="textbox" type="text" name="busLineID" placeholder="Bus Line" id="busLineID" required readonly>
+                </div>
+                <div class="input-description">Official ID of the bus route. It gets filled automatically by clicking Submit above.</div>
+                <div class="input-section">
+                    <input class="textbox" type="text" name="busStopID" placeholder="Bus Stop" id="busStopID" required readonly>
+                </div>
+                <div class="input-description">Official ID of the bus stop. It gets filled automatically after clicking on a bus stop in the list.</div>
+                <div class="input-section" id="minutes-wrapper">
+                    <input class="textbox" type="number" name="number" min="1" pattern="^\d+$" title="must be a positive whole number" placeholder="Number" required>
+                    <div>
+                        <input type="radio" id="minutes" name="units" value="minutes" checked>
+                        <label for="minutes">minutes</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="bus stops" name="units" value="bus stops">
+                        <label for="bus stops">bus stops</label>
+                    </div>
+                </div>
+                <div class="input-description">Minutes/Bus stops before the bus arrives when you want to receive an alert. Choose between 'minutes' and 'bus stops'.</div>
                 <!-- add back the required for phone and email later!!!! -->
-                <input class="textbox" type="tel" name="phone" placeholder="Phone Number" pattern="^\+1\d{10}$" title="Phone numbers must begin with +1 followed by the ten digits of the number (area code then seven digits). No spaces and other special characters like parentheses ()."><br>
-                <input class="textbox" type="email" name="email" placeholder="Email Address" ><br>
-                <button class="buttonstyle" type="submit">Set up alert</button>
+                <div class="input-section">
+                    <input class="textbox" type="tel" name="phone" placeholder="Phone Number" pattern="^\+1\d{10}$" title="Phone numbers must begin with +1 followed by the ten digits of the number (area code then seven digits). No spaces and other special characters like parentheses ().">
+                </div>
+                <div class="input-description">Phone number should be of the format +1XXXXXXXXXX (that's ten digits after the 1)</div>
+                <div class="input-section">
+                    <input class="textbox" type="email" name="email" placeholder="Email Address" >
+                </div>
+                <button id="submit-alert" class="buttonstyle" type="submit">Set up alert</button>
             </form>
     </div>
 
