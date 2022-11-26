@@ -126,7 +126,7 @@ class BusAlert:
 
     def sendEmail(self, msg):
         me = "nycbusalerts@gmail.com"
-        yag = yagmail.SMTP(me, "qupxvewoewdgsmee")
+        yag = yagmail.SMTP(me, os.environ["BUS_ALERTS_APP_PASSWORD"])
         yag.send(self.recipientEmail, subject="Bus Alert", contents=msg)
 
         print("email sent", self.busLineID, self.busStopID, self.recipientEmail)
