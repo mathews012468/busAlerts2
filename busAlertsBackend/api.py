@@ -48,7 +48,7 @@ def setUpAlerts():
     p.start()
     print("after begin process")
     return f"""Alert set up successfully!
-<form action="http://{os.environ["IP_ADDRESS"]}:{os.environ["FRONTEND_PORT"]}/" method="get">
+<form action="/" method="get">
     <button>Return to home</button>
 </form>""", 200
 
