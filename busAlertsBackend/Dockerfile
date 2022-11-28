@@ -9,6 +9,6 @@ COPY . .
 
 ENV FLASK_APP api.py
 
-RUN eval $(cat .env)
+RUN [ "python", "prepare_config.py"]
 
-CMD [ "flask", "run", "--host", "0.0.0.0"]
+CMD [ "uwsgi", "--ini", "config.ini"]

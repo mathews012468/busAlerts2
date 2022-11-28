@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 from flask_cors import CORS
-from . import busAlertScraper as bas
+import busAlertScraper as bas
 from multiprocessing import Process
 import os
 
