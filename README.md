@@ -6,7 +6,7 @@ docker-compose up
 ```
 
 ## TODO
-1. Make website default to https
+1. Make website default to https (done)
 2. SEO
 3. Auto recharge twilio
 4. Backup certificates and prod changes to default.conf and docker-compose.yaml
