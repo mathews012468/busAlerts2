@@ -15,3 +15,7 @@ docker-compose up
 7. Autocompletion suggestions for bus route
 8. https strict transport security
 9. Disable old versions of TLS
+10. Download image locally
+11. Server-side input validation
+12. Reject calls
+13. Reject text messages
