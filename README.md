@@ -20,3 +20,4 @@ docker-compose up
 12. Reject calls
 13. Reject text messages
 14. Add script to refresh bus info
+15. Make sure IP doesn't change (static IP maybe?)
