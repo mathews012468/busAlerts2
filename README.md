@@ -8,7 +8,7 @@ docker-compose up
 ## TODO
 1. Make website default to https (done)
 2. SEO
-3. Auto recharge twilio
+3. Auto recharge twilio (done)
 4. Backup certificates and prod changes to default.conf and docker-compose.yaml
 5. Logging
 6. Auto start server when computer turns on/restarts
