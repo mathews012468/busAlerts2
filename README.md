@@ -14,7 +14,7 @@ docker-compose up
 6. Auto start server when computer turns on/restarts
 7. Autocompletion suggestions for bus route
 8. https strict transport security (done)
-9. Disable old versions of TLS
+9. Disable old versions of TLS (done)
 10. Download image locally (done)
 11. Server-side input validation
 12. Reject calls (done, delete webhook)
