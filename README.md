@@ -9,7 +9,7 @@ docker-compose up
 1. Make website default to https (done)
 2. SEO
 3. Auto recharge twilio (done)
-4. Backup certificates and prod changes to default.conf and docker-compose.yaml
+4. Backup certificates and prod changes to default.conf and docker-compose.yaml (done, created new branch called prod to save prod changes, backed up certificates on separate private github repo)
 5. Logging
 6. Auto start server when computer turns on/restarts
 7. Autocompletion suggestions for bus route
