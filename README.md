@@ -13,7 +13,7 @@ docker-compose up
 5. Logging
 6. Auto start server when computer turns on/restarts
 7. Autocompletion suggestions for bus route
-8. https strict transport security
+8. https strict transport security (done)
 9. Disable old versions of TLS
 10. Download image locally (done)
 11. Server-side input validation
