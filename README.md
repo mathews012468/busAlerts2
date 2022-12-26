@@ -19,5 +19,5 @@ docker-compose up
 11. Server-side input validation
 12. Reject calls (done, delete webhook)
 13. Reject text messages (done, delete webhook)
-14. Add script to refresh bus info
+14. Add script to refresh bus info (done)
 15. Make sure IP doesn't change (static IP maybe?) (done, and yes it was static ip)
