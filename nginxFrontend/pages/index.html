@@ -41,6 +41,9 @@
                 busLineInputElement.value = jsonData["busLineID"]
                 delete jsonData["busLineID"]
 
+                const routeDisplay = document.getElementById("route-display")
+                routeDisplay.innerHTML = commonBusName
+
                 const stopsElement = document.getElementById("stops")
                 stopsElement.innerHTML = ""
                 Object.keys(jsonData).forEach((destination => {
@@ -70,6 +73,111 @@
             }
         }
 
+        function displayPossibleRoutes(possibleRoutes) {
+            possibleRouteDisplay = document.querySelector("#possible-buses")
+            //clear old data before displaying new
+            possibleRouteDisplay.innerHTML = ""
+            for (let i = 0; i < possibleRoutes.length; i++) {
+                possibleRouteDisplay.innerHTML += `<p class="possible-route" onclick="setRouteOnceClicked(this)">${possibleRoutes[i]}</p>`
+            }
+        }
+
+        let highlightedRouteIndex = 0
+        function getPossibleRoutes() {
+            //should reset every time new results display
+            highlightedRouteIndex = 0
+
+            routeSnippet = document.querySelector("#busCommonName").value
+
+            displayPossibleRoutes([]) //clear display before continuing
+            if (routeSnippet.length < 2) {
+                return
+            }
+
+            const url = `/possibleroutes?snippet=${routeSnippet}`
+            fetch(url, {
+                method: "GET"
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error: ${response.status}`)
+                }
+                return response.json()
+            }).then(jsonData => {
+                displayPossibleRoutes(jsonData)
+            })
+        }
+
+        function setRouteOnceClicked(routeElement) {
+            let routeInputElement = document.querySelector("#busCommonName")
+            routeInputElement.value = routeElement.textContent
+            displayPossibleRoutes([])
+        }
+
+        function clearPossibleRoutes() {
+            let routes = document.querySelectorAll(".possible-route")
+            for (let i = 0; i < routes.length; i++) {
+                routes[i].style = "background-color: white;"
+            }
+        }
+
+        function detectTabbingThroughRoutes(event) {
+            if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
+                return
+            }
+
+            if (event.key === "ArrowDown") {
+                highlightedRouteIndex += 1
+            } else if (event.key === "ArrowUp") {
+                highlightedRouteIndex -= 1
+            }
+
+            //we want routeIndex to be in the range of 1 to the number of routes displayed
+            //this achieves a wrap-around behavior. If they go up when they're already at
+            //the top, we want to send the them to the bottom (and vice versa)
+            let numberOfDisplayedRoutes = document.querySelector("#possible-buses").childElementCount
+            if (highlightedRouteIndex < 1) {
+                highlightedRouteIndex = numberOfDisplayedRoutes
+            } else if (highlightedRouteIndex > numberOfDisplayedRoutes) {
+                highlightedRouteIndex = 1
+            }
+
+            //clear everything, then highlight the correct one
+            clearPossibleRoutes()
+            let highlightedRoute = document.querySelector(`.possible-route:nth-child(${highlightedRouteIndex})`)
+            highlightedRoute.style = "background-color: gray;"
+        }
+
+        function selectRoute(event) {
+            let numberOfDisplayedRoutes = document.querySelector("#possible-buses").childElementCount
+            if (event.key !== "Enter" || highlightedRouteIndex === 0 || numberOfDisplayedRoutes === 0) {
+                return
+            }
+
+            //set the selected bus and hide all possible routes
+            let highlightedRoute = document.querySelector(`.possible-route:nth-child(${highlightedRouteIndex})`)
+            let routeInputElement = document.querySelector("#busCommonName")
+            routeInputElement.value = highlightedRoute.textContent
+            displayPossibleRoutes([])
+        }
+
+        function getStopsForRouteEnter() {
+            //only move forward if user hits enter, there is text in the input
+            let routeInputElement = document.querySelector("#busCommonName")
+            if (event.key !== "Enter" || routeInputElement.value == "") {
+                return
+            }
+            
+            displayPossibleRoutes([])
+            verifyBusLine()
+        }
+
+        function addEventToDetectRouteEdit() {
+            let routeInputElement = document.querySelector("#busCommonName")
+            routeInputElement.addEventListener("input", getPossibleRoutes)
+            routeInputElement.addEventListener("keydown", detectTabbingThroughRoutes)
+            routeInputElement.addEventListener("keydown", selectRoute)
+            routeInputElement.addEventListener("keydown", getStopsForRouteEnter)
+        }
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
@@ -78,7 +186,7 @@
 
 </head>
 
-<body onload="document.body.style.opacity='1'">
+<body onload="document.body.style.opacity='1'; addEventToDetectRouteEdit()">
 
     <style type="text/css">
         body {
@@ -158,20 +266,40 @@
             grid-column: 1 / 3;
             justify-self: center;
         }
+
+        #bus-search {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0px;
+        }
+
+        #possible-buses {
+            background-color: white;
+            margin-bottom: 20px;
+        }
+
+        .possible-route {
+            border: solid 1px gray;
+            margin: 0px;
+        }
+
+        .possible-route:hover {
+            background-color: gray;
+        }
     </style>
     <div class="content">
         <h1 style="color:rgb(12, 71, 129);">MTA Bus Alerts</h1><br>
-        <img text-align: center;
-            src="img/bus.webp"
-            alt="mta bus" width="570" height="280"><br>
+        <img src="img/bus.webp" alt="mta bus" width="570" height="280"><br>
         <br>
-        <div>
-            <input class="textbox" type="text" id="busCommonName" name="busCommonName" placeholder="Bus Common Name"
-                required></input>
+        <div id="bus-search">
+            <input class="textbox" type="text" id="busCommonName" name="busCommonName" placeholder="Bus Route" required></input>
+            <div id="possible-buses"></div>
         </div>
         <div>
             <button class="buttonstyle" onclick="verifyBusLine()">Submit</button>
         </div><br>
+        <div id="route-display"></div><br>
         <div id="stops"></div><br>
         <h5 style="color:rgb(12, 71, 129);" id="busLine">Bus Line: </h5>
         <h5 style="color:rgb(12, 71, 129);" id="busStop">Bus Stop: </h5>
