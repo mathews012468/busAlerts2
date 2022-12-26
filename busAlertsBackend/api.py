@@ -62,3 +62,11 @@ def getBusStops():
     response = bas.BusAlert.getAllStopsOnLine(busLineID)
     response["busLineID"] = busLineID
     return response, 200
+
+@app.route('/possibleroutes', methods=["GET"])
+def getPossibleRoutes():
+    routeSnippet = request.args.get("snippet")
+    if len(routeSnippet) < 2:
+        return [], 200
+    return bas.BusAlert.routesMatchingSnippet(routeSnippet)
+    
