@@ -167,7 +167,20 @@ class BusAlert:
             
             time.sleep(15)
 
-            
+    def routesMatchingSnippet(routeSnippet):
+        """
+        Return a list of bus routes whose common names partially match
+        the snippet provided
+        
+        e.g. if routeSnippet is Q3, this function would return buses like
+        the Q3, Q30, Q31, Q32, Q33, and so on.
+        """
+        if type(routeSnippet) != str or routeSnippet == "":
+            return []
+        
+        with open(BusAlert.BUS_ROUTES_FILE_PATH) as f:
+            routeReader = csv.DictReader(f, delimiter=";")
+            return [route["shortName"] for route in routeReader if route["shortName"].upper().find(routeSnippet.upper()) != -1]
 
     #CONVENIENCE METHODS
     def busLineIdToCommonName(busLineID):
@@ -266,7 +279,6 @@ class BusAlert:
         return f"Hours: {hours}, Minutes: {minutes}, Seconds: {numberOfSeconds}"
     
 if __name__ == "__main__":
-    # print( BusAlert.getAllStopsOnLine("MTA NYCT_Q54") )
     busStopID = "504306"
     busLineID = "MTA NYCT_Q54"
     email = "busalertsrecipient@gmail.com"
