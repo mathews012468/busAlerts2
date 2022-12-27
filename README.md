@@ -12,7 +12,7 @@ docker-compose up
 4. Backup certificates and prod changes to default.conf and docker-compose.yaml (done, created new branch called prod to save prod changes, backed up certificates on separate private github repo)
 5. Logging
 6. Auto start server when computer turns on/restarts
-7. Autocompletion suggestions for bus route
+7. Autocompletion suggestions for bus route (done)
 8. https strict transport security (done)
 9. Disable old versions of TLS (done)
 10. Download image locally (done)
