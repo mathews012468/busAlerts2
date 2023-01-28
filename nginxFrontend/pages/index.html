@@ -186,13 +186,19 @@
 <body onload="addEventToDetectRouteEdit()">
 
     <style type="text/css">
+        :root {
+            --main-bg-color: rgb(15,66,143);
+            --main-text-color: rgb(255, 170, 95);
+            --input-bg-color: #4eb5f1;
+        }
         body {
-            background: #528AAD;
+            background: var(--main-bg-color);
+            color: var(--main-text-color);
             font-family: "Lucida Console", "Courier New", monospace;
         }
 
         .textbox {
-            background-color: #427ABD;
+            background-color: var(--input-bg-color);
         }
 
 
@@ -222,8 +228,7 @@
             text-decoration: none;
             font-family: 'Roboto', sans-serif;
             font-weight: 300;
-            color: #FFFFFF;
-            background-color: #4eb5f1;
+            background-color: var(--input-bg-color);
             text-align: center;
             transition: all 0.2s;
         }
