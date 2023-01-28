@@ -251,7 +251,7 @@
         }
 
         #stops li:hover {
-            color: blue;
+            color: white;
             text-decoration: underline;
         }
 
@@ -289,7 +289,7 @@
         }
     </style>
     <div class="content">
-        <h1 style="color:rgb(12, 71, 129);">MTA Bus Alerts</h1><br>
+        <h1>MTA Bus Alerts</h1><br>
         <img src="img/bus.webp" alt="mta bus" width="570" height="280"><br>
         <br>
         <div id="bus-search">
@@ -301,8 +301,8 @@
         </div><br>
         <div id="route-display"></div><br>
         <div id="stops"></div><br>
-        <h5 style="color:rgb(12, 71, 129);" id="busLine">Bus Line: </h5>
-        <h5 style="color:rgb(12, 71, 129);" id="busStop">Bus Stop: </h5>
+        <h5 id="busLine">Bus Line: </h5>
+        <h5 id="busStop">Bus Stop: </h5>
         <form action="/alert" onsubmit="return hasUserProvidedContact()" id="alert-form" name="alert" method="post">
             <div class="input-section">
                 <input class="textbox" type="text" name="busLineID" placeholder="Bus Line" id="busLineID" required readonly>
