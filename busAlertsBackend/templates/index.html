@@ -19,46 +19,6 @@
             document.getElementById("busStop").scrollIntoView({ behavior: 'smooth' });
         }
 
-        function verifyBusLine() {
-            const commonBusName = document.getElementById("busCommonName").value
-
-            const url = `/getbusstops?commonName=${commonBusName}`
-            fetch(url, {
-                method: "GET"
-            }).then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error: ${response.status}`)
-                }
-                return response.json()
-            }).then(jsonData => {
-                //add the name of the bus to the text of the element with id busLine
-                //set the name attribute of that element to the busLineID
-                let busLineElement = document.getElementById("busLine")
-                busLineElement.setAttribute("name", jsonData["busLineID"])
-                busLineElement.textContent = "Bus Line: "
-                busLineElement.textContent += commonBusName
-
-                let busLineInputElement = document.getElementById("busLineID")
-                busLineInputElement.value = jsonData["busLineID"]
-                delete jsonData["busLineID"]
-
-                const routeDisplay = document.getElementById("route-display")
-                routeDisplay.innerHTML = commonBusName
-
-                const stopsElement = document.getElementById("stops")
-                stopsElement.innerHTML = ""
-                Object.keys(jsonData).forEach((destination => {
-                    stopsElement.innerHTML += `<div id="${destination}">${destination}</div>`
-                    for (let i = 0; i < jsonData[destination].length; i++) {
-                        const destinationElement = document.getElementById(destination)
-                        let code = jsonData[destination][i].code
-                        let name = jsonData[destination][i].name
-                        destinationElement.innerHTML += `<li id="${code}" onclick="clickedOnBusStop(this)">${name}</li>`
-                    }
-                }))
-            })
-        }
-
         //must have at least one of the following: phone number, email address
         function hasUserProvidedContact() {
             //all of these keys come from the name attribute
@@ -200,7 +160,6 @@
             background-color: var(--input-bg-color);
         }
 
-
         ::placeholder {
             color: black;
             opacity: 1;
@@ -241,7 +200,6 @@
                 display: block;
                 margin: 0.2em auto;
             }
-
         }
 
         #stops li {
@@ -290,20 +248,29 @@
     <div class="content">
         <h1>MTA Bus Alerts</h1>
         <img src="img/bus.webp" alt="mta bus" width="570" height="280">
-        <div id="bus-search">
-            <input class="textbox" type="text" id="busCommonName" name="busCommonName" placeholder="Bus Route" required></input>
+        <form id="bus-search" action="/getbusstops">
+            <input class="textbox" type="text" id="busCommonName" name="commonName" placeholder="Bus Route" required></input>
             <div id="possible-buses"></div>
-        </div>
-        <div>
-            <button class="buttonstyle" onclick="verifyBusLine()">Submit</button>
-        </div>
-        <div id="route-display"></div>
-        <div id="stops"></div>
-        <h5 id="busLine">Bus Line: </h5>
+            <button class="buttonstyle" type="submit" value="Submit">Submit</button>
+        </form>
+        <section id="stops">
+            <h2 id="route-display">{{ routeName }}</h2>
+            {% for destination in destinations %}
+                <section id="{{ destination }}">
+                    <h3>{{ destination }}</h2>
+                    <ul>
+                    {% for stop in stops[destination] %}
+                        <li id="{{stop.code}}" onclick="clickedOnBusStop(this)">{{stop.name}}</li>
+                    {% endfor %}
+                    </ul>
+                </section>
+            {% endfor %}
+        </section>
+        <h5 id="busLine" name="{{ routeID }}">Bus Line: {{ routeName }}</h5>
         <h5 id="busStop">Bus Stop: </h5>
         <form action="/alert" onsubmit="return hasUserProvidedContact()" id="alert-form" name="alert" method="post">
             <div class="input-section">
-                <input class="textbox" type="text" name="busLineID" placeholder="Bus Line" id="busLineID" required readonly>
+                <input class="textbox" type="text" name="busLineID" placeholder="Bus Line" id="busLineID" value="{{ routeID }}" required readonly>
             </div>
             <div class="input-description">Official ID of the bus route. It gets filled automatically by clicking Submit above.</div>
             <div class="input-section">

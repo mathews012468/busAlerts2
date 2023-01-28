@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from flask import render_template
 from flask_cors import CORS
 import busAlertScraper as bas
 from multiprocessing import Process
@@ -7,6 +8,10 @@ import os
 
 app = Flask(__name__)
 CORS(app)
+
+@app.route('/', methods=["GET"])
+def entry():
+    return render_template("index.html")
 
 #message: {"busStopID":, "busLineID":, "number": , "units": , "email": , "phone":} (number is 1-20, units is "stops" or "minutes")
 @app.route('/alert', methods=["POST"])
@@ -60,8 +65,8 @@ def getBusStops():
         return "Not a common name we recognize for a bus line", 400
 
     response = bas.BusAlert.getAllStopsOnLine(busLineID)
-    response["busLineID"] = busLineID
-    return response, 200
+    destinations = list(response.keys())
+    return render_template("index.html", routeName=busCommonName, routeID=busLineID, destinations=destinations, stops=response), 200
 
 @app.route('/possibleroutes', methods=["GET"])
 def getPossibleRoutes():
