@@ -3,10 +3,46 @@
     --main-text-color: rgb(255, 170, 95);
     --input-bg-color: #4eb5f1;
 }
+
 body {
     background: var(--main-bg-color);
     color: var(--main-text-color);
     font-family: "Lucida Console", "Courier New", monospace;
+}
+
+#alert {
+    position: absolute;
+    text-align: center;
+    color: black;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    margin: 20px;
+    height: 20vh;
+    font-size: 2em;
+    border-radius: 1%;
+    opacity: 0;
+    animation: fade 4s;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+#alert.good {
+    background-color: rgb(159, 227, 147);
+}
+
+#alert.bad {
+    background-color: rgb(240, 21, 43);
 }
 
 .textbox {
