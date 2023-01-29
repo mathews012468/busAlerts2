@@ -1,12 +1,19 @@
 from flask import Flask
 from flask import request
-from flask_cors import CORS
+from flask import render_template
 import busAlertScraper as bas
 from multiprocessing import Process
+import re
 import os
 
 app = Flask(__name__)
-CORS(app)
+
+@app.route('/', methods=["GET"])
+def entry():
+    return render_template("index.html")
+
+def render(goodOrBad, message):
+    return render_template("index.html", alert={"goodOrBad": goodOrBad, "message": message})
 
 #message: {"busStopID":, "busLineID":, "number": , "units": , "email": , "phone":} (number is 1-20, units is "stops" or "minutes")
 @app.route('/alert', methods=["POST"])
@@ -16,14 +23,27 @@ def setUpAlerts():
         busStopID = request.form["busStopID"]
         busLineID = request.form["busLineID"]
     except KeyError:
-        return "One of the following necessary pieces of information is missing: the bus line (busLineID) or the bus stop (busStopID)", 400
+        message = "One of the following necessary pieces of information is missing: the bus line (busLineID) or the bus stop (busStopID)"
+        return render("bad", message), 400
 
     #I probably should verify that at least one is provided
     email = request.form.get("email")
     phone = request.form.get("phone")
-    if email == "" and phone == "":
-        return "Email and phone number are missing: at least one must be provided", 400
+    isUsingEmail = True
+    isUsingPhone = True
+    if (email == "" or email is None):
+        isUsingEmail = False
+    if (phone == "" or phone is None):
+        isUsingPhone = False
+    if not isUsingEmail and not isUsingPhone:
+        message = "Email and phone number are missing: at least one must be provided"
+        return render("bad", message), 400
 
+    phoneRegex = re.compile("^\+1\d{10}$")
+    if isUsingPhone and phoneRegex.match(phone) is None:
+        message = "Phone number not in valid format"
+        return render("bad", message), 400
+    
     #if user doesn't supply a unit, assume it's minutes
     try:
         units = request.form["units"]
@@ -47,18 +67,26 @@ def setUpAlerts():
     print("after init process")
     p.start()
     print("after begin process")
-    return f"""Alert set up successfully!
-<form action="/" method="get">
-    <button>Return to home</button>
-</form>""", 200
+
+    message = "Alert set up successfully!"
+    return render("good", message), 200
 
 
 @app.route('/getbusstops', methods=["GET"])
 def getBusStops():
     busCommonName = request.args.get("commonName")
     if (busLineID := bas.BusAlert.busCommonNameToLineId(busCommonName)) == None:
-        return "Not a common name we recognize for a bus line", 400
+        message = "Not a common name we recognize for a bus line"
+        return render("bad", message), 400
 
     response = bas.BusAlert.getAllStopsOnLine(busLineID)
-    response["busLineID"] = busLineID
-    return response, 200
+    destinations = list(response.keys())
+    return render_template("index.html", routeName=busCommonName, routeID=busLineID, destinations=destinations, stops=response), 200
+
+@app.route('/possibleroutes', methods=["GET"])
+def getPossibleRoutes():
+    routeSnippet = request.args.get("snippet")
+    if len(routeSnippet) < 2:
+        return [], 200
+    return bas.BusAlert.routesMatchingSnippet(routeSnippet)
+    
