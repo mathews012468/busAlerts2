@@ -7,7 +7,12 @@
 body {
     background: var(--main-bg-color);
     color: var(--main-text-color);
-    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+img {
+    height: 280px;
+    width: 100%;
+    max-width: 600px;
 }
 
 #alert {
@@ -60,12 +65,6 @@ body {
     color: black;
 }
 
-.content {
-    max-width: 500px;
-    margin: auto;
-    padding: 10px;
-}
-
 .buttonstyle {
     display: inline-block;
     padding: 0.3em 1.2em;
@@ -105,7 +104,6 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     row-gap: 20px;
-    align-items: center;
 }
 
 #busLine, #busStop {
