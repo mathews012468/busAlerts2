@@ -141,6 +141,7 @@ MTA NYCT_B54;Downtown Brooklyn - Ridgewood;B54
 MTA NYCT_B57;Gowanus - Maspeth;B57
 MTA NYCT_SIM22;Eltingville - Midtown Manhattan Express;SIM22
 MTA NYCT_SIM23;Annadale - Midtown Manhattan Express;SIM23
+MTA NYCT_L92;L Shuttle Bus - Abingdon Sq - FDR Drive;L92
 MTA NYCT_BX2;Kingsbridge Heights - Mott Haven;Bx2
 MTA NYCT_BX1;Riverdale - Mott Haven;Bx1
 MTA NYCT_B70;Dyker Heights - Sunset Park;B70
@@ -198,7 +199,6 @@ MTA NYCT_BX12;Pelham Bay - Inwood;Bx12
 MTA NYCT_BX11;George Washington Bridge - Parkchester;Bx11
 MTA NYCT_BX10;Riverdale - Norwood;Bx10
 MTA NYCT_BX19;NY Botanical Garden - Riverbank Park;Bx19
-MTA NYCT_BX18;Morris Heights/High Bridge Circulator;Bx18
 MTA NYCT_BX17;Fordham Plaza - Port Morris;Bx17
 MTA NYCT_BX16;Pelham - Norwood;Bx16
 MTA NYCT_BX15;Fordham Plaza - The Hub;Bx15
@@ -206,6 +206,7 @@ MTA NYCT_M14A+;Lower East Side - Abingdon Sq;M14A-SBS
 MTA NYCT_B82+;Coney Island -spring Creek Towers;B82-SBS
 MTA NYCT_Q77;Laurelton - Jamaica;Q77
 MTA NYCT_Q76;College Point - Jamaica;Q76
+MTA NYCT_J90;J Shuttle Bus - Crescent St - Jamaica Van Wyck Station;J90
 MTA NYCT_M125;Manhattanville - The Hub;M125
 MTA NYCT_BX35;George Washington Bridge-West Farms Road;Bx35
 MTA NYCT_X68;Floral Park - Midtown Manhattan Express;X68
@@ -252,6 +253,8 @@ MTA NYCT_M31;Yorkville - Clinton;M31
 MTA NYCT_M35;Ward's Island - East Harlem;M35
 MTA NYCT_M14D+;Lower East Side - Chelsea Piers;M14D-SBS
 MTA NYCT_M60+;West Side - LaGuardia Airport;M60-SBS
+MTA NYCT_BX18A;Morris Heights/High Bridge Circulator;Bx18A
+MTA NYCT_BX18B;Morris Heights/High Bridge Circulator;Bx18B
 MTA NYCT_Q44+;Bronx Zoo - Jamaica;Q44-SBS
 MTA NYCT_M7;Harlem - 14th Street;M7
 MTA NYCT_M8;West Village - East Village;M8
