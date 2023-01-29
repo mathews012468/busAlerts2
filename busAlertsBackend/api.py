@@ -39,7 +39,7 @@ def setUpAlerts():
         message = "Email and phone number are missing: at least one must be provided"
         return render("bad", message), 400
 
-    phoneRegex = re.compile("^\+\d{10}$")
+    phoneRegex = re.compile("^\+1\d{10}$")
     if isUsingPhone and phoneRegex.match(phone) is None:
         message = "Phone number not in valid format"
         return render("bad", message), 400
