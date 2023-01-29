@@ -31,12 +31,18 @@ def setUpAlerts():
     #I probably should verify that at least one is provided
     email = request.form.get("email")
     phone = request.form.get("phone")
-    if (email == "" or email is None) and (phone == "" or phone is None):
+    isUsingEmail = True
+    isUsingPhone = True
+    if (email == "" or email is None):
+        isUsingEmail = False
+    if (phone == "" or phone is None):
+        isUsingPhone = False
+    if not isUsingEmail and not isUsingPhone:
         message = "Email and phone number are missing: at least one must be provided"
         return render("bad", message), 400
 
     phoneRegex = re.compile("^\+\d{10}$")
-    if phoneRegex.match(phone) is None:
+    if isUsingPhone and phoneRegex.match(phone) is None:
         message = "Phone number not in valid format"
         return render("bad", message), 400
     
@@ -65,7 +71,7 @@ def setUpAlerts():
     print("after begin process")
 
     message = "Alert set up successfully!"
-    return render("bad", message), 200
+    return render("good", message), 200
 
 
 @app.route('/getbusstops', methods=["GET"])
