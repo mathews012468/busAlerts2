@@ -27,7 +27,7 @@ def setUpAlerts():
     #I probably should verify that at least one is provided
     email = request.form.get("email")
     phone = request.form.get("phone")
-    if email == "" and phone == "":
+    if (email == "" or email is None) and (phone == "" or phone is None):
         message = "Email and phone number are missing: at least one must be provided"
         return render_template("index.html", alert={"goodOrBad": "bad", "message": message}), 400
 
