@@ -4,6 +4,7 @@ from flask import render_template
 from flask_cors import CORS
 import busAlertScraper as bas
 from multiprocessing import Process
+import re
 import os
 
 app = Flask(__name__)
@@ -12,6 +13,9 @@ CORS(app)
 @app.route('/', methods=["GET"])
 def entry():
     return render_template("index.html")
+
+def render(goodOrBad, message):
+    return render_template("index.html", alert={"goodOrBad": goodOrBad, "message": message})
 
 #message: {"busStopID":, "busLineID":, "number": , "units": , "email": , "phone":} (number is 1-20, units is "stops" or "minutes")
 @app.route('/alert', methods=["POST"])
@@ -22,15 +26,20 @@ def setUpAlerts():
         busLineID = request.form["busLineID"]
     except KeyError:
         message = "One of the following necessary pieces of information is missing: the bus line (busLineID) or the bus stop (busStopID)"
-        return render_template("index.html", alert={"goodOrBad": "bad", "message": message}), 400
+        return render("bad", message), 400
 
     #I probably should verify that at least one is provided
     email = request.form.get("email")
     phone = request.form.get("phone")
     if (email == "" or email is None) and (phone == "" or phone is None):
         message = "Email and phone number are missing: at least one must be provided"
-        return render_template("index.html", alert={"goodOrBad": "bad", "message": message}), 400
+        return render("bad", message), 400
 
+    phoneRegex = re.compile("^\+\d{10}$")
+    if phoneRegex.match(phone) is None:
+        message = "Phone number not in valid format"
+        return render("bad", message), 400
+    
     #if user doesn't supply a unit, assume it's minutes
     try:
         units = request.form["units"]
@@ -56,7 +65,7 @@ def setUpAlerts():
     print("after begin process")
 
     message = "Alert set up successfully!"
-    return render_template("index.html", alert={"goodOrBad": "good", "message": message}), 200
+    return render("bad", message), 200
 
 
 @app.route('/getbusstops', methods=["GET"])
@@ -64,7 +73,7 @@ def getBusStops():
     busCommonName = request.args.get("commonName")
     if (busLineID := bas.BusAlert.busCommonNameToLineId(busCommonName)) == None:
         message = "Not a common name we recognize for a bus line"
-        return render_template("index.html", alert={"goodOrBad": "bad", "message": message}), 400
+        return render("bad", message), 400
 
     response = bas.BusAlert.getAllStopsOnLine(busLineID)
     destinations = list(response.keys())
