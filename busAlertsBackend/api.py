@@ -1,14 +1,12 @@
 from flask import Flask
 from flask import request
 from flask import render_template
-from flask_cors import CORS
 import busAlertScraper as bas
 from multiprocessing import Process
 import re
 import os
 
 app = Flask(__name__)
-CORS(app)
 
 @app.route('/', methods=["GET"])
 def entry():
