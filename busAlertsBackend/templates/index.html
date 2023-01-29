@@ -34,17 +34,13 @@
                 </section>
             {% endfor %}
         </section>
-        <h5 id="busLine" name="{{ routeID }}">Bus Line: {{ routeName }}</h5>
-        <h5 id="busStop">Bus Stop: </h5>
         <form action="/alert" onsubmit="return hasUserProvidedContact()" id="alert-form" name="alert" method="post">
-            <div class="input-section">
+            <div id="busLine" name="{{ routeID }}">Bus Line: {{ routeName }}</div>
+            <div id="busStop">Bus Stop: </div>
+            <div class="hidden">
                 <input class="textbox" type="text" name="busLineID" placeholder="Bus Line" id="busLineID" value="{{ routeID }}" required readonly>
-            </div>
-            <div class="input-description">Official ID of the bus route. It gets filled automatically by clicking Submit above.</div>
-            <div class="input-section">
                 <input class="textbox" type="text" name="busStopID" placeholder="Bus Stop" id="busStopID" required readonly>
             </div>
-            <div class="input-description">Official ID of the bus stop. It gets filled automatically after clicking on a bus stop in the list.</div>
             <div class="input-section" id="minutes-wrapper">
                 <input class="textbox" type="number" name="number" min="1" pattern="^\d+$" title="must be a positive whole number" placeholder="Number" required>
                 <div>

@@ -113,6 +113,11 @@ body {
     justify-self: center;
 }
 
+.hidden {
+    position: absolute;
+    opacity: 0;
+}
+
 #bus-search {
     display: flex;
     flex-direction: column;
