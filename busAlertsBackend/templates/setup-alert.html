@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8" />
+  <title>MTA Bus Alerts - Set Up Alert</title>
+  <meta name="description" content="Set up all of the information related to your bus alert. Here you provide what stop you want to track, when you would like to receive the alert, and how we should contact you." />
+  <link rel="canonical" href="https://mtabusalerts.com/">
+  <link rel="icon" href="img/favicon.png" type="image/x-icon" />
+  <script src="js/main.js" type="text/javascript" defer></script>
+  <link type="text/css" rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <form action="/alert" onsubmit="return hasUserProvidedContact()" id="alert-form" name="alert" method="post">
+    <div id="busLine">Bus Line: {{ routeName }}</div>
+    <div id="busStop">Bus Stop: {{ stopName }}</div>
+    <div class="hidden">
+      <input class="textbox" type="text" name="busLineID" placeholder="Bus Line" id="busLineID" value="{{ routeID }}"
+        required readonly>
+      <input class="textbox" type="text" name="busStopID" placeholder="Bus Stop" id="busStopID" value="{{ stopID }}"
+        required readonly>
+    </div>
+    <div class="input-section" id="minutes-wrapper">
+      <input class="textbox" type="number" name="number" min="1" pattern="^\d+$" title="must be a positive whole number"
+        placeholder="Number" required>
+      <div>
+        <input type="radio" id="minutes" name="units" value="minutes" checked>
+        <label for="minutes">minutes</label>
+      </div>
+      <div>
+        <input type="radio" id="bus stops" name="units" value="bus stops">
+        <label for="bus stops">bus stops</label>
+      </div>
+    </div>
+    <div class="input-description">Minutes/Bus stops before the bus arrives when you want to receive an alert.
+      Choose between 'minutes' and 'bus stops'.</div>
+    <!-- add back the required for phone and email later!!!! -->
+    <div class="input-section">
+      <input class="textbox" type="tel" name="phone" placeholder="Phone Number" pattern="^\+1\d{10}$"
+        title="Phone numbers must begin with +1 followed by the ten digits of the number (area code then seven digits). No spaces and other special characters like parentheses ().">
+    </div>
+    <div class="input-description">Phone number should be of the format +1XXXXXXXXXX (that's ten digits after
+      the 1)</div>
+    <div class="input-section">
+      <input class="textbox" type="email" name="email" placeholder="Email Address">
+    </div>
+    <button id="submit-alert" class="buttonstyle" type="submit">Set up alert</button>
+  </form>
+</body>
+
+</html>

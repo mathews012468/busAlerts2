@@ -71,6 +71,18 @@ def setUpAlerts():
     message = "Alert set up successfully!"
     return render("good", message), 200
 
+@app.route('/alertinfo', methods=["GET"])
+def displayAlertInformation():
+    routeID = request.args.get("routeID")
+    stopID = request.args.get("stopID")
+
+    if not bas.BusAlert.isValidBusStop(stopID, routeID):
+        message = "Either invalid stop, invalid route, or stop doesn't belong to route."
+        return render("bad", message), 400
+
+    routeName = bas.BusAlert.busLineIdToCommonName(routeID)
+    stopName = bas.BusAlert.busStopIdToCommonName(stopID, routeID)
+    return render_template("setup-alert.html", routeName=routeName, stopName=stopName, routeID=routeID, stopID=stopID), 200
 
 @app.route('/getbusstops', methods=["GET"])
 def getBusStops():
