@@ -17,9 +17,8 @@
   {% if alert is defined %}
   <div id="alert" class="{{ alert.goodOrBad }}">{{ alert.message }}</div>
   {% endif %}
-  <div class="container-fluid">
-    <h1>MTA Bus Alerts</h1>
-    <img src="img/bus.webp" alt="mta bus">
+  <h1>MTA Bus Alerts</h1>
+  <main>
     <form id="bus-search" action="/getbusstops">
       <input class="textbox" type="text" id="busCommonName" name="commonName" placeholder="Bus Route" required></input>
       <div id="possible-buses"></div>
@@ -38,7 +37,7 @@
       </section>
       {% endfor %}
     </section>
-  </div>
+  </main>
 </body>
 
 </html>
