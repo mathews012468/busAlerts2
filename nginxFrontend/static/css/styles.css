@@ -7,6 +7,9 @@
 body {
     background: var(--main-bg-color);
     color: var(--main-text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #alert {
@@ -84,14 +87,24 @@ body {
     }
 }
 
-#stops li {
-    cursor: pointer;
-    margin: 5px;
+#stops {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
-#stops li:hover {
+#stops section ul {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#stops a {
     color: white;
-    text-decoration: underline;
+}
+
+#stops a:hover {
+    color: gray;
 }
 
 #alert-form {
