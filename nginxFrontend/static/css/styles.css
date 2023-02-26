@@ -9,12 +9,6 @@ body {
     color: var(--main-text-color);
 }
 
-img {
-    height: 280px;
-    width: 100%;
-    max-width: 600px;
-}
-
 #alert {
     position: absolute;
     text-align: center;
