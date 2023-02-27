@@ -131,5 +131,6 @@ def getPossibleRoutes():
     routeSnippet = request.args.get("snippet")
     if len(routeSnippet) < 2:
         return [], 200
-    return bas.BusAlert.routesMatchingSnippet(routeSnippet)
-    
+    possibleRoutes = bas.BusAlert.routesMatchingSnippet(routeSnippet)
+    logger.info(f"In /possibleroutes. routeSnippet: {routeSnippet}, possibleRoutes: {possibleRoutes}")
+    return possibleRoutes, 200
