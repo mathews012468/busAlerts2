@@ -27,10 +27,11 @@ def render(goodOrBad, message):
 @app.route('/alert', methods=["POST"])
 def setUpAlerts():
     #busStopID, busLineID, and email are all required in order to move forward
-    try:
-        busStopID = request.form["busStopID"]
-        busLineID = request.form["busLineID"]
-    except KeyError:
+    busStopID = request.form.get("busStopID")
+    busLineID = request.form.get("busLineID")
+    missingStopID = busStopID == "" or busStopID is None
+    missingLineID = busLineID == "" or busLineID is None
+    if missingLineID or missingStopID:
         message = "One of the following necessary pieces of information is missing: the bus line (busLineID) or the bus stop (busStopID)"
         return render("bad", message), 400
 
