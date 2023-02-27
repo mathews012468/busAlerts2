@@ -6,7 +6,6 @@ from multiprocessing import Process
 import re
 import logging
 from datetime import date
-import os
 
 app = Flask(__name__)
 #How to make log messages from other libraries not appear: https://stackoverflow.com/a/8269542
