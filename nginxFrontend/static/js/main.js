@@ -31,7 +31,7 @@ function displayPossibleRoutes(possibleRoutes) {
     //clear old data before displaying new
     possibleRouteDisplay.innerHTML = ""
     for (let i = 0; i < possibleRoutes.length; i++) {
-        possibleRouteDisplay.innerHTML += `<p class="possible-route" onclick="setRouteOnceClicked(this)">${possibleRoutes[i]}</p>`
+        possibleRouteDisplay.innerHTML += `<a href="/getbusstops?commonName=${possibleRoutes[i]}"><p class="possible-route">${possibleRoutes[i]}</p></a>`
     }
 }
 
