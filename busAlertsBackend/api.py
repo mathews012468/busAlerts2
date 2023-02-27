@@ -12,7 +12,7 @@ app = Flask(__name__)
 #the idea is to set the logging level for other libraries higher than for my code
 #another answer on that post says that's not ideal, since it doesn't really stop
 #the other libraries from logging, but it's good enough for me.
-logging.basicConfig(filename=f'/app/logs/log', level=logging.ERROR, format='%(asctime)s %(name)s %(levelname)s: %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+logging.basicConfig(filename=f'/app/logs/log_{date.today().strftime("%Y-%m-%d")}', level=logging.ERROR, format='%(asctime)s %(name)s %(levelname)s: %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
