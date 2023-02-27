@@ -23,6 +23,23 @@ def entry():
 def render(goodOrBad, message):
     return render_template("index.html", alert={"goodOrBad": goodOrBad, "message": message})
 
+def emailLoggingFormat(email):
+    """
+    Return first four characters of email and the domain.
+    To promote privacy, this is what I will be logging
+    """
+    name, domain = email.split("@")
+    loggedName = name[:4]
+    loggedEmail = f"{loggedName}@{domain}"
+    return loggedEmail
+
+def phoneLoggingFormat(phone):
+    """
+    Return last four number of phone
+    To promote privacy, this is what I will be logging
+    """
+    return phone[-4:]
+
 #message: {"busStopID":, "busLineID":, "number": , "units": , "email": , "phone":} (number is 1-20, units is "stops" or "minutes")
 @app.route('/alert', methods=["POST"])
 def setUpAlerts():
@@ -33,6 +50,7 @@ def setUpAlerts():
     missingLineID = busLineID == "" or busLineID is None
     if missingLineID or missingStopID:
         message = "One of the following necessary pieces of information is missing: the bus line (busLineID) or the bus stop (busStopID)"
+        logger.error(f"Stop ID or Route ID missing. stopID: {busStopID}, routeID: {busLineID}")
         return render("bad", message), 400
 
     #I probably should verify that at least one is provided
@@ -46,11 +64,13 @@ def setUpAlerts():
         isUsingPhone = False
     if not isUsingEmail and not isUsingPhone:
         message = "Email and phone number are missing: at least one must be provided"
+        logger.error("Email and phone number both missing. stopID: {busStopID}, routeID: {busLineID}")
         return render("bad", message), 400
 
     phoneRegex = re.compile("^\+1\d{10}$")
     if isUsingPhone and phoneRegex.match(phone) is None:
         message = "Phone number not in valid format"
+        logger.error(message)
         return render("bad", message), 400
     
     #if user doesn't supply a unit, assume it's minutes
@@ -69,13 +89,11 @@ def setUpAlerts():
     except (KeyError, ValueError):
         number = 5
 
+    logger.info(f"Ready to set up alert. Stop ID: {busStopID}, Route ID: {busLineID}, Number: {number}, Units: {units}, Email: {emailLoggingFormat(email)}, Phone: {phoneLoggingFormat(phone)}")
     #start separate process for new request
     alert = bas.BusAlert(busStopID, busLineID, number, units, email=email, phone=phone)
-    print(alert.busStopID, alert.busLineID, alert.number, alert.units, alert.recipientEmail, alert.recipientPhone)
     p = Process(target=alert.setupAlerts)
-    print("after init process")
     p.start()
-    print("after begin process")
 
     message = "Alert set up successfully!"
     return render("good", message), 200
