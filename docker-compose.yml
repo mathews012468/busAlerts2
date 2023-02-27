@@ -6,4 +6,8 @@ services:
       - "80:80"
   backend:
     build: ./busAlertsBackend
+    volumes:
+      - logs:/app/logs
+volumes:
+  logs:
 
