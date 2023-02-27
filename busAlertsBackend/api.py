@@ -118,10 +118,12 @@ def getBusStops():
     busCommonName = request.args.get("commonName")
     if (busLineID := bas.BusAlert.busCommonNameToLineId(busCommonName)) == None:
         message = "Not a common name we recognize for a bus line"
+        logger.error(f"Not a common name we recognize for a bus route. routeName: {busCommonName}")
         return render("bad", message), 400
 
     response = bas.BusAlert.getAllStopsOnLine(busLineID)
     destinations = list(response.keys())
+    logger.info(f"Rendering index.html. routeName: {busCommonName}, routeID: {busLineID}, destinations: {destinations}, not showing stops")
     return render_template("index.html", routeName=busCommonName, routeID=busLineID, destinations=destinations, stops=response), 200
 
 @app.route('/possibleroutes', methods=["GET"])
