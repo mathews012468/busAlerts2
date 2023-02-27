@@ -105,10 +105,12 @@ def displayAlertInformation():
 
     if not bas.BusAlert.isValidBusStop(stopID, routeID):
         message = "Either invalid stop, invalid route, or stop doesn't belong to route."
+        logger.error(f"Something wrong with stopId and/or routeID. stopID: {stopID}, routeID: {routeID}")
         return render("bad", message), 400
 
     routeName = bas.BusAlert.busLineIdToCommonName(routeID)
     stopName = bas.BusAlert.busStopIdToCommonName(stopID, routeID)
+    logger.info(f"Rendering setup-alert.html. routeName: {routeName}, stopName: {stopName}, routeID: {routeID}, stopID: {stopID}")
     return render_template("setup-alert.html", routeName=routeName, stopName=stopName, routeID=routeID, stopID=stopID), 200
 
 @app.route('/getbusstops', methods=["GET"])
