@@ -50,7 +50,7 @@ def setUpAlerts():
     missingLineID = busLineID == "" or busLineID is None
     if missingLineID or missingStopID:
         message = "One of the following necessary pieces of information is missing: the bus line (busLineID) or the bus stop (busStopID)"
-        logger.error(f"Stop ID or Route ID missing. stopID: {busStopID}, routeID: {busLineID}")
+        logger.error(f"In /alert. Stop ID or Route ID missing. stopID: {busStopID}, routeID: {busLineID}")
         return render("bad", message), 400
 
     #I probably should verify that at least one is provided
@@ -64,7 +64,7 @@ def setUpAlerts():
         isUsingPhone = False
     if not isUsingEmail and not isUsingPhone:
         message = "Email and phone number are missing: at least one must be provided"
-        logger.error("Email and phone number both missing. stopID: {busStopID}, routeID: {busLineID}")
+        logger.error("In /alert. Email and phone number both missing. stopID: {busStopID}, routeID: {busLineID}")
         return render("bad", message), 400
 
     phoneRegex = re.compile("^\+1\d{10}$")
@@ -89,7 +89,7 @@ def setUpAlerts():
     except (KeyError, ValueError):
         number = 5
 
-    logger.info(f"Ready to set up alert. Stop ID: {busStopID}, Route ID: {busLineID}, Number: {number}, Units: {units}, Email: {emailLoggingFormat(email)}, Phone: {phoneLoggingFormat(phone)}")
+    logger.info(f"In /alert. Ready to set up alert. Stop ID: {busStopID}, Route ID: {busLineID}, Number: {number}, Units: {units}, Email: {emailLoggingFormat(email)}, Phone: {phoneLoggingFormat(phone)}")
     #start separate process for new request
     alert = bas.BusAlert(busStopID, busLineID, number, units, email=email, phone=phone)
     p = Process(target=alert.setupAlerts)
@@ -105,12 +105,12 @@ def displayAlertInformation():
 
     if not bas.BusAlert.isValidBusStop(stopID, routeID):
         message = "Either invalid stop, invalid route, or stop doesn't belong to route."
-        logger.error(f"Something wrong with stopId and/or routeID. stopID: {stopID}, routeID: {routeID}")
+        logger.error(f"In /alertinfo. Something wrong with stopId and/or routeID. stopID: {stopID}, routeID: {routeID}")
         return render("bad", message), 400
 
     routeName = bas.BusAlert.busLineIdToCommonName(routeID)
     stopName = bas.BusAlert.busStopIdToCommonName(stopID, routeID)
-    logger.info(f"Rendering setup-alert.html. routeName: {routeName}, stopName: {stopName}, routeID: {routeID}, stopID: {stopID}")
+    logger.info(f"In /alertinfo. Rendering setup-alert.html. routeName: {routeName}, stopName: {stopName}, routeID: {routeID}, stopID: {stopID}")
     return render_template("setup-alert.html", routeName=routeName, stopName=stopName, routeID=routeID, stopID=stopID), 200
 
 @app.route('/getbusstops', methods=["GET"])
@@ -118,12 +118,12 @@ def getBusStops():
     busCommonName = request.args.get("commonName")
     if (busLineID := bas.BusAlert.busCommonNameToLineId(busCommonName)) == None:
         message = "Not a common name we recognize for a bus line"
-        logger.error(f"Not a common name we recognize for a bus route. routeName: {busCommonName}")
+        logger.error(f"In /getbusstops. Not a common name we recognize for a bus route. routeName: {busCommonName}")
         return render("bad", message), 400
 
     response = bas.BusAlert.getAllStopsOnLine(busLineID)
     destinations = list(response.keys())
-    logger.info(f"Rendering index.html. routeName: {busCommonName}, routeID: {busLineID}, destinations: {destinations}, not showing stops")
+    logger.info(f"In /getbusstops. Rendering index.html. routeName: {busCommonName}, routeID: {busLineID}, destinations: {destinations}, not showing stops")
     return render_template("index.html", routeName=busCommonName, routeID=busLineID, destinations=destinations, stops=response), 200
 
 @app.route('/possibleroutes', methods=["GET"])
