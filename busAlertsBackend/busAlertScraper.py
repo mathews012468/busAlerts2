@@ -7,9 +7,11 @@ from enum import Enum
 import csv
 import os
 from twilio.rest import Client
+import logging
 
 #TODO: incorporate logging into the project
 #get API key as environment variable
+logger = logging.getLogger("api.busAlertScraper")
 
 class Units(Enum):
     BUS_STOPS = "stops"
@@ -219,6 +221,7 @@ class BusAlert:
         return: str?
         """
         if not (busCommonName := BusAlert.busLineIdToCommonName(busLineID)):
+            logger.info(f"In busStopIdToCommonName. Route ID not found. routeID: {busLineID}")
             return None
         with open(f"{BusAlert.BUS_STOPS_FILE_PATH}/busStops_{busCommonName}/allStops.csv") as f:
             fieldnames = ["code","id","name","mainRoute","routeIds","destination"]
@@ -226,6 +229,7 @@ class BusAlert:
             for stop in busStopsFile:
                 if stop["code"] == busStopID:
                     return stop["name"]
+        logger.info(f"In busStopIdToCommonName. Stop not found in route. routeName: {busCommonName}, routeID: {busLineID}, stopID: {busStopID}")
 
     def getAllStopsOnLine(busLineID):
         if not (busCommonName := BusAlert.busLineIdToCommonName(busLineID)):
