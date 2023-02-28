@@ -11,3 +11,8 @@ services:
       - "443:443"
   backend:
     build: ./busAlertsBackend
+    volumes:
+      - logs:/app/logs
+volumes:
+  logs:
+
