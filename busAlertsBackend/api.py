@@ -6,6 +6,7 @@ from multiprocessing import Process
 import re
 import logging
 from datetime import date
+import urllib.parse
 
 app = Flask(__name__)
 #How to make log messages from other libraries not appear: https://stackoverflow.com/a/8269542
@@ -120,11 +121,14 @@ def getBusStops():
         message = "Not a common name we recognize for a bus line"
         logger.error(f"In /getbusstops. Not a common name we recognize for a bus route. routeName: {busCommonName}")
         return render("bad", message), 400
+    #some routes have a + in their id, which gets treated as a space in url
+    #to avoid that we url encode the +
+    encodedRouteID = urllib.parse.quote(busLineID)
 
     response = bas.BusAlert.getAllStopsOnLine(busLineID)
     destinations = list(response.keys())
     logger.info(f"In /getbusstops. Rendering index.html. routeName: {busCommonName}, routeID: {busLineID}, destinations: {destinations}, not showing stops")
-    return render_template("index.html", routeName=busCommonName, routeID=busLineID, destinations=destinations, stops=response), 200
+    return render_template("index.html", routeName=busCommonName, routeID=encodedRouteID, destinations=destinations, stops=response), 200
 
 @app.route('/possibleroutes', methods=["GET"])
 def getPossibleRoutes():
