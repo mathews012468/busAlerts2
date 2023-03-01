@@ -24,23 +24,6 @@ def entry():
 def render(goodOrBad, message):
     return render_template("index.html", alert={"goodOrBad": goodOrBad, "message": message})
 
-def emailLoggingFormat(email):
-    """
-    Return first four characters of email and the domain.
-    To promote privacy, this is what I will be logging
-    """
-    name, domain = email.split("@")
-    loggedName = name[:4]
-    loggedEmail = f"{loggedName}@{domain}"
-    return loggedEmail
-
-def phoneLoggingFormat(phone):
-    """
-    Return last four number of phone
-    To promote privacy, this is what I will be logging
-    """
-    return phone[-4:]
-
 #message: {"busStopID":, "busLineID":, "number": , "units": , "email": , "phone":} (number is 1-20, units is "stops" or "minutes")
 @app.route('/alert', methods=["POST"])
 def setUpAlerts():
@@ -64,7 +47,7 @@ def setUpAlerts():
         isUsingPhone = False
     if not isUsingEmail and not isUsingPhone:
         message = "Email and phone number are missing: at least one must be provided"
-        logger.error("In /alert. Email and phone number both missing. stopID: {busStopID}, routeID: {busLineID}")
+        logger.error(f"In /alert. Email and phone number both missing. stopID: {busStopID}, routeID: {busLineID}")
         return render("bad", message), 400
 
     phoneRegex = re.compile("^\+1\d{10}$")
@@ -89,7 +72,7 @@ def setUpAlerts():
     except (KeyError, ValueError):
         number = 5
 
-    logger.info(f"In /alert. Ready to set up alert. Stop ID: {busStopID}, Route ID: {busLineID}, Number: {number}, Units: {units}, Email: {emailLoggingFormat(email)}, Phone: {phoneLoggingFormat(phone)}")
+    logger.info(f"In /alert. Ready to set up alert. Stop ID: {busStopID}, Route ID: {busLineID}, Number: {number}, Units: {units}, Email: {bas.BusAlert.emailLoggingFormat(email)}, Phone: {bas.BusAlert.phoneLoggingFormat(phone)}")
     #start separate process for new request
     alert = bas.BusAlert(busStopID, busLineID, number, units, email=email, phone=phone)
     p = Process(target=alert.setupAlerts)

@@ -76,14 +76,14 @@ class BusAlert:
         try:
             now = responseJSON["Siri"]["ServiceDelivery"]["ResponseTimestamp"]
         except KeyError:
-            print("Something likely went wrong with the request.")
+            logger.error(f"In getClosestBus. Something likely went wrong with the request. routeID: {self.busLineID}, stopID: {self.busStopID}")
             return None, None
 
         #try to extract the list of buses nearby
         try:
             busesOnTheWay = responseJSON["Siri"]["ServiceDelivery"]["StopMonitoringDelivery"][0]["MonitoredStopVisit"]
         except KeyError:
-            print("No buses nearby.") #debug
+            logger.info(f"In getClosestBus. No buses nearby. routeID: {self.busLineID}, stopID: {self.busStopID}")
             return None, None
         
         #try to extract the arrival time of the nearest bus
@@ -91,7 +91,7 @@ class BusAlert:
             expectedArrivalTime = busesOnTheWay[0]["MonitoredVehicleJourney"]["MonitoredCall"]["ExpectedArrivalTime"]
             numberOfStopsAway = busesOnTheWay[0]["MonitoredVehicleJourney"]["MonitoredCall"]["NumberOfStopsAway"]
         except (KeyError, IndexError):
-            print("Error extracting expected arrival time, number of stops away, or current time from JSON response.") #debug
+            logger.error(f"In getClosestBus. Error extracting expected arrival time, number of stops away, or current time from JSON response. routeID: {self.busLineID}, stopID: {self.busStopID}")
             return None, None
 
         #determine the number of seconds until the bus arrives
@@ -129,7 +129,7 @@ class BusAlert:
         yag = yagmail.SMTP(me, os.environ["BUS_ALERTS_APP_PASSWORD"])
         yag.send(self.recipientEmail, subject="Bus Alert", contents=msg)
 
-        print("email sent", self.busLineID, self.busStopID, self.recipientEmail)
+        logger.info(f"In sendEmail. email sent. routeID: {self.busLineID}, stopID: {self.busStopID}, recipientEmail: {self.emailLoggingFormat(self.recipientEmail)}")
     
     def sendText(self, msg):
         account_sid = os.environ["TWILIO_ACCOUNT_SID"]
@@ -142,19 +142,21 @@ class BusAlert:
                             from_='+13474921832',
                             to=self.recipientPhone
                         )
+        
+        logger.info(f"In sendText. text sent. routeID: {self.busLineID}, stopID: {self.busStopID}, recipientPhone: {self.phoneLoggingFormat(self.recipientPhone)} ")
 
     def setupAlerts(self):
         """
         Query the location of the nearest bus every few seconds and send
         an email if the bus gets close enough to the desired stop.
         """
-        print("setupAlerts before while")
         while True:
             timeUntilBusArrives, numberOfStopsAway = self.getClosestBus()
             if (timeUntilBusArrives, numberOfStopsAway) == (None, None):
+                logger.info(f"In setupAlerts. No buses nearby. routeID: {self.busLineID}, stopID: {self.busStopID}")
                 time.sleep(15)
                 continue
-            print(BusAlert.numberOfSecondsToHMS(timeUntilBusArrives), numberOfStopsAway, self.busLineID, self.busStopID, self.recipientEmail) #debug
+            logger.info(f"In setupAlerts. Time until bus arrives: {BusAlert.numberOfSecondsToHMS(timeUntilBusArrives)}, numberOfStopsAway: {numberOfStopsAway}, routeID: {self.busLineID}, stopID: {self.busStopID}")
 
             if self.units == Units.MINUTES:
                 secondsUntilAlertIsSent = self.number*60
@@ -279,6 +281,23 @@ class BusAlert:
         numberOfSeconds = numberOfSeconds - minutes * 60
 
         return f"Hours: {hours}, Minutes: {minutes}, Seconds: {numberOfSeconds}"
+    
+    def emailLoggingFormat(email):
+        """
+        Return first four characters of email and the domain.
+        To promote privacy, this is what I will be logging
+        """
+        name, domain = email.split("@")
+        loggedName = name[:4]
+        loggedEmail = f"{loggedName}@{domain}"
+        return loggedEmail
+
+    def phoneLoggingFormat(phone):
+        """
+        Return last four number of phone
+        To promote privacy, this is what I will be logging
+        """
+        return phone[-4:]
     
 if __name__ == "__main__":
     busStopID = "504306"
