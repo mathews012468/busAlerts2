@@ -89,8 +89,16 @@ def setUpAlerts():
         number = int(request.form["number"])
     except (KeyError, ValueError):
         number = 5
+    if number < 1:
+        message = "The number of minutes/bus stops must be positive."
+        return render("bad", message), 400
 
-    logger.info(f"In /alert. Ready to set up alert. Stop ID: {busStopID}, Route ID: {busLineID}, Number: {number}, Units: {units}, Email: {bas.BusAlert.emailLoggingFormat(email)}, Phone: {bas.BusAlert.phoneLoggingFormat(phone)}")
+    alertLog = f"In /alert. Ready to set up alert. Stop ID: {busStopID}, Route ID: {busLineID}, Number: {number}, Units: {units}"
+    if isUsingEmail:
+        alertLog += f", Email: {bas.BusAlert.emailLoggingFormat(email)}"
+    if isUsingPhone:
+        alertLog += f", Phone: {bas.BusAlert.phoneLoggingFormat(phone)}"
+    logger.info(alertLog)
     #start separate process for new request
     alert = bas.BusAlert(busStopID, busLineID, number, units, email=email, phone=phone)
     p = Process(target=alert.setupAlerts)
