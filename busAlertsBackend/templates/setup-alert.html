@@ -13,10 +13,10 @@
 </head>
 <body>
   <form action="/alert" onsubmit="return hasUserProvidedContact()" id="alert-form" name="alert" method="post">
-    <div id="busLine">Bus Line: {{ routeName }}</div>
+    <div id="busRoute">Bus Route: {{ routeName }}</div>
     <div id="busStop">Bus Stop: {{ stopName }}</div>
     <div class="hidden">
-      <input class="textbox" type="text" name="busLineID" placeholder="Bus Line" id="busLineID" value="{{ routeID }}"
+      <input class="textbox" type="text" name="busRouteID" placeholder="Bus Line" id="busRouteID" value="{{ routeID }}"
         required readonly>
       <input class="textbox" type="text" name="busStopID" placeholder="Bus Stop" id="busStopID" value="{{ stopID }}"
         required readonly>

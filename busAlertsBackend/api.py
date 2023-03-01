@@ -26,25 +26,25 @@ def entry():
 def render(goodOrBad, message):
     return render_template("index.html", alert={"goodOrBad": goodOrBad, "message": message})
 
-#message: {"busStopID":, "busLineID":, "number": , "units": , "email": , "phone":} (number is 1-20, units is "stops" or "minutes")
+#message: {"busStopID":, "busRouteID":, "number": , "units": , "email": , "phone":} (number is 1-20, units is "stops" or "minutes")
 @app.route('/alert', methods=["POST"])
 def setUpAlerts():
-    #busStopID, busLineID, and email are all required in order to move forward
+    #busStopID, busRouteID, and email are all required in order to move forward
     busStopID = request.form.get("busStopID")
-    busLineID = request.form.get("busLineID")
+    busRouteID = request.form.get("busRouteID")
     missingStopID = busStopID == "" or busStopID is None
-    missingLineID = busLineID == "" or busLineID is None
-    if missingLineID or missingStopID:
-        message = "One of the following necessary pieces of information is missing: the bus line (busLineID) or the bus stop (busStopID)"
-        logger.error(f"In /alert. Stop ID or Route ID missing. stopID: {busStopID}, routeID: {busLineID}")
+    missingRouteID = busRouteID == "" or busRouteID is None
+    if missingRouteID or missingStopID:
+        message = "One of the following necessary pieces of information is missing: the bus route (busRouteID) or the bus stop (busStopID)"
+        logger.error(f"In /alert. Stop ID or Route ID missing. stopID: {busStopID}, routeID: {busRouteID}")
         return render("bad", message), 400
-    if not bas.BusAlert.isValidBusLine(busLineID):
+    if not bas.BusAlert.isValidBusRoute(busRouteID):
         message = f"Not a valid route."
-        logger.error(f"In /alert. Invalid routeID. routeID: {busLineID}")
+        logger.error(f"In /alert. Invalid routeID. routeID: {busRouteID}")
         return render("bad", message), 400
-    if not bas.BusAlert.isValidBusStop(busStopID, busLineID):
+    if not bas.BusAlert.isValidBusStop(busStopID, busRouteID):
         message = f"Either invalid stop or stop doesn't belong to given route."
-        logger.error(f"In /alert. Either invalid stop or stop doesn't belong to route. routeID: {busLineID}, stopID: {busStopID}")
+        logger.error(f"In /alert. Either invalid stop or stop doesn't belong to route. routeID: {busRouteID}, stopID: {busStopID}")
         return render("bad", message)
 
     email = request.form.get("email")
@@ -57,7 +57,7 @@ def setUpAlerts():
         isUsingPhone = False
     if not isUsingEmail and not isUsingPhone:
         message = "Email and phone number are missing: at least one must be provided"
-        logger.error(f"In /alert. Email and phone number both missing. stopID: {busStopID}, routeID: {busLineID}")
+        logger.error(f"In /alert. Email and phone number both missing. stopID: {busStopID}, routeID: {busRouteID}")
         return render("bad", message), 400
 
     if isUsingEmail:
@@ -65,7 +65,7 @@ def setUpAlerts():
             validate_email_with_regex(email)
         except YagInvalidEmailAddress:
             message = "Invalid email format."
-            logger.error(f"In /alert. Invalid email format. email: {email}, routeID: {busLineID}, stopID: {busStopID}")
+            logger.error(f"In /alert. Invalid email format. email: {email}, routeID: {busRouteID}, stopID: {busStopID}")
             return render("bad", message), 400
 
     phoneRegex = re.compile("^\+1\d{10}$")
@@ -93,14 +93,14 @@ def setUpAlerts():
         message = "The number of minutes/bus stops must be positive."
         return render("bad", message), 400
 
-    alertLog = f"In /alert. Ready to set up alert. Stop ID: {busStopID}, Route ID: {busLineID}, Number: {number}, Units: {units}"
+    alertLog = f"In /alert. Ready to set up alert. Stop ID: {busStopID}, Route ID: {busRouteID}, Number: {number}, Units: {units}"
     if isUsingEmail:
         alertLog += f", Email: {bas.BusAlert.emailLoggingFormat(email)}"
     if isUsingPhone:
         alertLog += f", Phone: {bas.BusAlert.phoneLoggingFormat(phone)}"
     logger.info(alertLog)
     #start separate process for new request
-    alert = bas.BusAlert(busStopID, busLineID, number, units, email=email, phone=phone)
+    alert = bas.BusAlert(busStopID, busRouteID, number, units, email=email, phone=phone)
     p = Process(target=alert.setupAlerts)
     p.start()
 
@@ -117,7 +117,7 @@ def displayAlertInformation():
         logger.error(f"In /alertinfo. Something wrong with stopId and/or routeID. stopID: {stopID}, routeID: {routeID}")
         return render("bad", message), 400
 
-    routeName = bas.BusAlert.busLineIdToCommonName(routeID)
+    routeName = bas.BusAlert.busRouteIdToCommonName(routeID)
     stopName = bas.BusAlert.busStopIdToCommonName(stopID, routeID)
     logger.info(f"In /alertinfo. Rendering setup-alert.html. routeName: {routeName}, stopName: {stopName}, routeID: {routeID}, stopID: {stopID}")
     return render_template("setup-alert.html", routeName=routeName, stopName=stopName, routeID=routeID, stopID=stopID), 200
@@ -125,17 +125,17 @@ def displayAlertInformation():
 @app.route('/getbusstops', methods=["GET"])
 def getBusStops():
     busCommonName = request.args.get("commonName")
-    if (busLineID := bas.BusAlert.busCommonNameToLineId(busCommonName)) == None:
-        message = "Not a common name we recognize for a bus line"
+    if (busRouteID := bas.BusAlert.busCommonNameToRouteId(busCommonName)) == None:
+        message = "Not a common name we recognize for a bus route"
         logger.error(f"In /getbusstops. Not a common name we recognize for a bus route. routeName: {busCommonName}")
         return render("bad", message), 400
     #some routes have a + in their id, which gets treated as a space in url
     #to avoid that we url encode the +
-    encodedRouteID = urllib.parse.quote(busLineID)
+    encodedRouteID = urllib.parse.quote(busRouteID)
 
-    response = bas.BusAlert.getAllStopsOnLine(busLineID)
+    response = bas.BusAlert.getAllStopsOnRoute(busRouteID)
     destinations = list(response.keys())
-    logger.info(f"In /getbusstops. Rendering index.html. routeName: {busCommonName}, routeID: {busLineID}, destinations: {destinations}, not showing stops")
+    logger.info(f"In /getbusstops. Rendering index.html. routeName: {busCommonName}, routeID: {busRouteID}, destinations: {destinations}, not showing stops")
     return render_template("index.html", routeName=busCommonName, routeID=encodedRouteID, destinations=destinations, stops=response), 200
 
 @app.route('/possibleroutes', methods=["GET"])
