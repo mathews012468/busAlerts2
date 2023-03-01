@@ -148,7 +148,7 @@ class BusAlert:
                 logger.info(f"In setupAlerts. No buses nearby. routeID: {self.busLineID}, stopID: {self.busStopID}")
                 time.sleep(15)
                 continue
-            logger.info(f"In setupAlerts. Time until bus arrives: {BusAlert.numberOfSecondsToHMS(timeUntilBusArrives)}, numberOfStopsAway: {numberOfStopsAway}, routeID: {self.busLineID}, stopID: {self.busStopID}")
+            logger.info(f"In setupAlerts. Time until bus arrives: {BusAlert.numberOfSecondsToHMS(timeUntilBusArrives)}, numberOfStopsAway: {numberOfStopsAway}, threshold: {self.number} {self.units}, routeID: {self.busLineID}, stopID: {self.busStopID}")
 
             if self.units == Units.MINUTES:
                 secondsUntilAlertIsSent = self.number*60
