@@ -129,7 +129,7 @@ class BusAlert:
         yag = yagmail.SMTP(me, os.environ["BUS_ALERTS_APP_PASSWORD"])
         yag.send(self.recipientEmail, subject="Bus Alert", contents=msg)
 
-        logger.info(f"In sendEmail. email sent. routeID: {self.busLineID}, stopID: {self.busStopID}, recipientEmail: {self.emailLoggingFormat(self.recipientEmail)}")
+        logger.info(f"In sendEmail. email sent. routeID: {self.busLineID}, stopID: {self.busStopID}, recipientEmail: {BusAlert.emailLoggingFormat(self.recipientEmail)}")
     
     def sendText(self, msg):
         account_sid = os.environ["TWILIO_ACCOUNT_SID"]
@@ -143,7 +143,7 @@ class BusAlert:
                             to=self.recipientPhone
                         )
         
-        logger.info(f"In sendText. text sent. routeID: {self.busLineID}, stopID: {self.busStopID}, recipientPhone: {self.phoneLoggingFormat(self.recipientPhone)} ")
+        logger.info(f"In sendText. text sent. routeID: {self.busLineID}, stopID: {self.busStopID}, recipientPhone: {BusAlert.phoneLoggingFormat(self.recipientPhone)} ")
 
     def setupAlerts(self):
         """
