@@ -15,22 +15,14 @@ class Units(Enum):
     BUS_STOPS = "stops"
     MINUTES = "minutes"
 
-class MissingValueError(Exception):
-    def __init__(self, msg):
-        self.msg = msg
-
 class BusAlert:
     API_KEY = os.environ["MTA_API_KEY"]
     BUS_ROUTES_FILE_PATH = "staticMtaInfo/busRoutes.csv"
     BUS_STOPS_FILE_PATH = "staticMtaInfo/stopsByRoute"
 
     def __init__(self, busStopID, busLineID, number=5, units=Units.MINUTES, email=None, phone=None):
-        if email == "" and phone == "":
-            raise MissingValueError("Email and phone number are missing: at least one must be provided.")
-        if not BusAlert.isValidBusLine(busLineID):
-            raise ValueError("Bus line ID is not valid.")
-        if not BusAlert.isValidBusStop(busStopID, busLineID):
-            raise ValueError("Either bus stop ID is not valid or does not belong to bus line ID.")
+        #responsibility is on the creator of a BusAlert object to make
+        #sure that the inputs are valid
         self.busStopID = busStopID
         self.busLineID = busLineID
         self.recipientEmail = email

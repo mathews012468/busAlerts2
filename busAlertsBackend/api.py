@@ -1,6 +1,8 @@
 from flask import Flask
 from flask import request
 from flask import render_template
+from yagmail.validate import validate_email_with_regex
+from yagmail.error import YagInvalidEmailAddress
 import busAlertScraper as bas
 from multiprocessing import Process
 import re
@@ -36,19 +38,35 @@ def setUpAlerts():
         message = "One of the following necessary pieces of information is missing: the bus line (busLineID) or the bus stop (busStopID)"
         logger.error(f"In /alert. Stop ID or Route ID missing. stopID: {busStopID}, routeID: {busLineID}")
         return render("bad", message), 400
+    if not bas.BusAlert.isValidBusLine(busLineID):
+        message = f"Not a valid route."
+        logger.error(f"In /alert. Invalid routeID. routeID: {busLineID}")
+        return render("bad", message), 400
+    if not bas.BusAlert.isValidBusStop(busStopID, busLineID):
+        message = f"Either invalid stop or stop doesn't belong to given route."
+        logger.error(f"In /alert. Either invalid stop or stop doesn't belong to route. routeID: {busLineID}, stopID: {busStopID}")
+        return render("bad", message)
 
     email = request.form.get("email")
     phone = request.form.get("phone")
     isUsingEmail = True
     isUsingPhone = True
-    if (email == "" or email is None):
+    if email == "" or email is None:
         isUsingEmail = False
-    if (phone == "" or phone is None):
+    if phone == "" or phone is None:
         isUsingPhone = False
     if not isUsingEmail and not isUsingPhone:
         message = "Email and phone number are missing: at least one must be provided"
         logger.error(f"In /alert. Email and phone number both missing. stopID: {busStopID}, routeID: {busLineID}")
         return render("bad", message), 400
+
+    if isUsingEmail:
+        try:
+            validate_email_with_regex(email)
+        except YagInvalidEmailAddress:
+            message = "Invalid email format."
+            logger.error(f"In /alert. Invalid email format. email: {email}, routeID: {busLineID}, stopID: {busStopID}")
+            return render("bad", message), 400
 
     phoneRegex = re.compile("^\+1\d{10}$")
     if isUsingPhone and phoneRegex.match(phone) is None:
