@@ -15,22 +15,14 @@ class Units(Enum):
     BUS_STOPS = "stops"
     MINUTES = "minutes"
 
-class MissingValueError(Exception):
-    def __init__(self, msg):
-        self.msg = msg
-
 class BusAlert:
     API_KEY = os.environ["MTA_API_KEY"]
     BUS_ROUTES_FILE_PATH = "staticMtaInfo/busRoutes.csv"
     BUS_STOPS_FILE_PATH = "staticMtaInfo/stopsByRoute"
 
     def __init__(self, busStopID, busLineID, number=5, units=Units.MINUTES, email=None, phone=None):
-        if email == "" and phone == "":
-            raise MissingValueError("Email and phone number are missing: at least one must be provided.")
-        if not BusAlert.isValidBusLine(busLineID):
-            raise ValueError("Bus line ID is not valid.")
-        if not BusAlert.isValidBusStop(busStopID, busLineID):
-            raise ValueError("Either bus stop ID is not valid or does not belong to bus line ID.")
+        #responsibility is on the creator of a BusAlert object to make
+        #sure that the inputs are valid
         self.busStopID = busStopID
         self.busLineID = busLineID
         self.recipientEmail = email
@@ -129,7 +121,7 @@ class BusAlert:
         yag = yagmail.SMTP(me, os.environ["BUS_ALERTS_APP_PASSWORD"])
         yag.send(self.recipientEmail, subject="Bus Alert", contents=msg)
 
-        logger.info(f"In sendEmail. email sent. routeID: {self.busLineID}, stopID: {self.busStopID}, recipientEmail: {self.emailLoggingFormat(self.recipientEmail)}")
+        logger.info(f"In sendEmail. email sent. routeID: {self.busLineID}, stopID: {self.busStopID}, recipientEmail: {BusAlert.emailLoggingFormat(self.recipientEmail)}")
     
     def sendText(self, msg):
         account_sid = os.environ["TWILIO_ACCOUNT_SID"]
@@ -143,7 +135,7 @@ class BusAlert:
                             to=self.recipientPhone
                         )
         
-        logger.info(f"In sendText. text sent. routeID: {self.busLineID}, stopID: {self.busStopID}, recipientPhone: {self.phoneLoggingFormat(self.recipientPhone)} ")
+        logger.info(f"In sendText. text sent. routeID: {self.busLineID}, stopID: {self.busStopID}, recipientPhone: {BusAlert.phoneLoggingFormat(self.recipientPhone)} ")
 
     def setupAlerts(self):
         """
@@ -156,7 +148,7 @@ class BusAlert:
                 logger.info(f"In setupAlerts. No buses nearby. routeID: {self.busLineID}, stopID: {self.busStopID}")
                 time.sleep(15)
                 continue
-            logger.info(f"In setupAlerts. Time until bus arrives: {BusAlert.numberOfSecondsToHMS(timeUntilBusArrives)}, numberOfStopsAway: {numberOfStopsAway}, routeID: {self.busLineID}, stopID: {self.busStopID}")
+            logger.info(f"In setupAlerts. Time until bus arrives: {BusAlert.numberOfSecondsToHMS(timeUntilBusArrives)}, numberOfStopsAway: {numberOfStopsAway}, threshold: {self.number} {self.units}, routeID: {self.busLineID}, stopID: {self.busStopID}")
 
             if self.units == Units.MINUTES:
                 secondsUntilAlertIsSent = self.number*60
