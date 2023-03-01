@@ -54,7 +54,6 @@ def setUpAlerts():
         logger.error(f"In /alert. Stop ID or Route ID missing. stopID: {busStopID}, routeID: {busLineID}")
         return render("bad", message), 400
 
-    #I probably should verify that at least one is provided
     email = request.form.get("email")
     phone = request.form.get("phone")
     isUsingEmail = True

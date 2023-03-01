@@ -9,8 +9,6 @@ import os
 from twilio.rest import Client
 import logging
 
-#TODO: incorporate logging into the project
-#get API key as environment variable
 logger = logging.getLogger("api.busAlertScraper")
 
 class Units(Enum):
