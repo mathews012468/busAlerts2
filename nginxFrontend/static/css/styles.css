@@ -113,7 +113,7 @@ body {
     row-gap: 20px;
 }
 
-#busLine, #busStop {
+#busRoute, #busStop {
     grid-column: 1 / 3;
 }
 

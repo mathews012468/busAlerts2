@@ -20,36 +20,36 @@ class BusAlert:
     BUS_ROUTES_FILE_PATH = "staticMtaInfo/busRoutes.csv"
     BUS_STOPS_FILE_PATH = "staticMtaInfo/stopsByRoute"
 
-    def __init__(self, busStopID, busLineID, number=5, units=Units.MINUTES, email=None, phone=None):
+    def __init__(self, busStopID, busRouteID, number=5, units=Units.MINUTES, email=None, phone=None):
         #responsibility is on the creator of a BusAlert object to make
         #sure that the inputs are valid
         self.busStopID = busStopID
-        self.busLineID = busLineID
+        self.busRouteID = busRouteID
         self.recipientEmail = email
         self.recipientPhone = phone
         self.number = number
         self.units = units
 
-    def isValidBusLine(busLineID):
+    def isValidBusRoute(busRouteID):
         """
-        Check if the bus line id is valid.
+        Check if the bus route id is valid.
 
-        busLineID: str
+        busRouteID: str
         return: bool
         """
-        if BusAlert.busLineIdToCommonName(busLineID) == None:
+        if BusAlert.busRouteIdToCommonName(busRouteID) == None:
             return False
         return True
 
-    def isValidBusStop(busStopID, busLineID):
+    def isValidBusStop(busStopID, busRouteID):
         """
-        Check if the bus stop id is valid and belongs to the bus line id.
+        Check if the bus stop id is valid and belongs to the bus route id.
 
         busStopID: str
-        busLineID: str
+        busRouteID: str
         return: bool
         """
-        if BusAlert.busStopIdToCommonName(busStopID, busLineID) == None:
+        if BusAlert.busStopIdToCommonName(busStopID, busRouteID) == None:
             return False
         return True
 
@@ -61,21 +61,21 @@ class BusAlert:
         The first element in the tuple is the number of seconds until the bus arrives.
         The second element in the tuple is how far the bus is by the number of stops.
         """
-        url = f"https://bustime.mta.info/api/siri/stop-monitoring.json?key={self.API_KEY}&MonitoringRef={self.busStopID}&LineRef={self.busLineID}&version=2"
+        url = f"https://bustime.mta.info/api/siri/stop-monitoring.json?key={self.API_KEY}&MonitoringRef={self.busStopID}&LineRef={self.busRouteID}&version=2"
         responseJSON = json.loads( requests.get(url).content )
 
         #try to extract the time of the response
         try:
             now = responseJSON["Siri"]["ServiceDelivery"]["ResponseTimestamp"]
         except KeyError:
-            logger.error(f"In getClosestBus. Something likely went wrong with the request. routeID: {self.busLineID}, stopID: {self.busStopID}")
+            logger.error(f"In getClosestBus. Something likely went wrong with the request. routeID: {self.busRouteID}, stopID: {self.busStopID}")
             return None, None
 
         #try to extract the list of buses nearby
         try:
             busesOnTheWay = responseJSON["Siri"]["ServiceDelivery"]["StopMonitoringDelivery"][0]["MonitoredStopVisit"]
         except KeyError:
-            logger.info(f"In getClosestBus. No buses nearby. routeID: {self.busLineID}, stopID: {self.busStopID}")
+            logger.info(f"In getClosestBus. No buses nearby. routeID: {self.busRouteID}, stopID: {self.busStopID}")
             return None, None
         
         #try to extract the arrival time of the nearest bus
@@ -83,7 +83,7 @@ class BusAlert:
             expectedArrivalTime = busesOnTheWay[0]["MonitoredVehicleJourney"]["MonitoredCall"]["ExpectedArrivalTime"]
             numberOfStopsAway = busesOnTheWay[0]["MonitoredVehicleJourney"]["MonitoredCall"]["NumberOfStopsAway"]
         except (KeyError, IndexError):
-            logger.error(f"In getClosestBus. Error extracting expected arrival time, number of stops away, or current time from JSON response. routeID: {self.busLineID}, stopID: {self.busStopID}")
+            logger.error(f"In getClosestBus. Error extracting expected arrival time, number of stops away, or current time from JSON response. routeID: {self.busRouteID}, stopID: {self.busStopID}")
             return None, None
 
         #determine the number of seconds until the bus arrives
@@ -109,7 +109,7 @@ class BusAlert:
         if busArrivalDistance > busAlertDistance:
             return False
 
-        msg = f"{BusAlert.busLineIdToCommonName(self.busLineID)} is less than {self.number} {self.units.value} away from {BusAlert.busStopIdToCommonName(self.busStopID, self.busLineID)}!"
+        msg = f"{BusAlert.busRouteIdToCommonName(self.busRouteID)} is less than {self.number} {self.units.value} away from {BusAlert.busStopIdToCommonName(self.busStopID, self.busRouteID)}!"
         if self.recipientEmail != "":
             self.sendEmail(msg)
         if self.recipientPhone != "":
@@ -121,7 +121,7 @@ class BusAlert:
         yag = yagmail.SMTP(me, os.environ["BUS_ALERTS_APP_PASSWORD"])
         yag.send(self.recipientEmail, subject="Bus Alert", contents=msg)
 
-        logger.info(f"In sendEmail. email sent. routeID: {self.busLineID}, stopID: {self.busStopID}, recipientEmail: {BusAlert.emailLoggingFormat(self.recipientEmail)}")
+        logger.info(f"In sendEmail. email sent. routeID: {self.busRouteID}, stopID: {self.busStopID}, recipientEmail: {BusAlert.emailLoggingFormat(self.recipientEmail)}")
     
     def sendText(self, msg):
         account_sid = os.environ["TWILIO_ACCOUNT_SID"]
@@ -135,7 +135,7 @@ class BusAlert:
                             to=self.recipientPhone
                         )
         
-        logger.info(f"In sendText. text sent. routeID: {self.busLineID}, stopID: {self.busStopID}, recipientPhone: {BusAlert.phoneLoggingFormat(self.recipientPhone)} ")
+        logger.info(f"In sendText. text sent. routeID: {self.busRouteID}, stopID: {self.busStopID}, recipientPhone: {BusAlert.phoneLoggingFormat(self.recipientPhone)} ")
 
     def setupAlerts(self):
         """
@@ -145,10 +145,10 @@ class BusAlert:
         while True:
             timeUntilBusArrives, numberOfStopsAway = self.getClosestBus()
             if (timeUntilBusArrives, numberOfStopsAway) == (None, None):
-                logger.info(f"In setupAlerts. No buses nearby. routeID: {self.busLineID}, stopID: {self.busStopID}")
+                logger.info(f"In setupAlerts. No buses nearby. routeID: {self.busRouteID}, stopID: {self.busStopID}")
                 time.sleep(15)
                 continue
-            logger.info(f"In setupAlerts. Time until bus arrives: {BusAlert.numberOfSecondsToHMS(timeUntilBusArrives)}, numberOfStopsAway: {numberOfStopsAway}, threshold: {self.number} {self.units}, routeID: {self.busLineID}, stopID: {self.busStopID}")
+            logger.info(f"In setupAlerts. Time until bus arrives: {BusAlert.numberOfSecondsToHMS(timeUntilBusArrives)}, numberOfStopsAway: {numberOfStopsAway}, threshold: {self.number} {self.units}, routeID: {self.busRouteID}, stopID: {self.busStopID}")
 
             if self.units == Units.MINUTES:
                 secondsUntilAlertIsSent = self.number*60
@@ -177,22 +177,22 @@ class BusAlert:
             return [route["shortName"] for route in routeReader if route["shortName"].upper().find(routeSnippet.upper()) != -1]
 
     #CONVENIENCE METHODS
-    def busLineIdToCommonName(busLineID):
+    def busRouteIdToCommonName(busRouteID):
         """
-        Return common name of busLineID. (e.g. go from MTABC_Q39 to Q39)
+        Return common name of busRouteID. (e.g. go from MTABC_Q39 to Q39)
 
-        busLineID: str
+        busRouteID: str
         return: str?
         """
         with open(BusAlert.BUS_ROUTES_FILE_PATH) as f:
             busRoutesFile = csv.DictReader(f, delimiter=";")
             for route in busRoutesFile:
-                if route["id"] == busLineID:
+                if route["id"] == busRouteID:
                     return route["shortName"]
 
-    def busCommonNameToLineId(busCommonName):
+    def busCommonNameToRouteId(busCommonName):
         """
-        Return the bus line ID of busCommonName. (e.g. go from Q39 to MTABC_Q39)
+        Return the bus route ID of busCommonName. (e.g. go from Q39 to MTABC_Q39)
 
         busCommonName: str
         return: str?
@@ -203,17 +203,17 @@ class BusAlert:
                 if route["shortName"].upper() == busCommonName.upper():
                     return route["id"]
 
-    def busStopIdToCommonName(busStopID, busLineID):
+    def busStopIdToCommonName(busStopID, busRouteID):
         """
         Return common name of busStopID. (e.g. go from 504263 to METROPOLITAN AV/71 ST)
-        busStopID must be a bus stop for busLineID.
+        busStopID must be a bus stop for busRouteID.
 
         busStopID: str
-        busLineID: str
+        busRouteID: str
         return: str?
         """
-        if not (busCommonName := BusAlert.busLineIdToCommonName(busLineID)):
-            logger.info(f"In busStopIdToCommonName. Route ID not found. routeID: {busLineID}")
+        if not (busCommonName := BusAlert.busRouteIdToCommonName(busRouteID)):
+            logger.info(f"In busStopIdToCommonName. Route ID not found. routeID: {busRouteID}")
             return None
         with open(f"{BusAlert.BUS_STOPS_FILE_PATH}/busStops_{busCommonName}/allStops.csv") as f:
             fieldnames = ["code","id","name","mainRoute","routeIds","destination"]
@@ -221,10 +221,10 @@ class BusAlert:
             for stop in busStopsFile:
                 if stop["code"] == busStopID:
                     return stop["name"]
-        logger.info(f"In busStopIdToCommonName. Stop not found in route. routeName: {busCommonName}, routeID: {busLineID}, stopID: {busStopID}")
+        logger.info(f"In busStopIdToCommonName. Stop not found in route. routeName: {busCommonName}, routeID: {busRouteID}, stopID: {busStopID}")
 
-    def getAllStopsOnLine(busLineID):
-        if not (busCommonName := BusAlert.busLineIdToCommonName(busLineID)):
+    def getAllStopsOnRoute(busRouteID):
+        if not (busCommonName := BusAlert.busRouteIdToCommonName(busRouteID)):
             return None
 
         """
@@ -293,9 +293,9 @@ class BusAlert:
     
 if __name__ == "__main__":
     busStopID = "504306"
-    busLineID = "MTA NYCT_Q54"
+    busRouteID = "MTA NYCT_Q54"
     email = "busalertsrecipient@gmail.com"
     stops = 20
     units = Units.BUS_STOPS
-    busAlerter = BusAlert(busStopID, busLineID, email, stops, units)
+    busAlerter = BusAlert(busStopID, busRouteID, email, stops, units)
     busAlerter.setupAlerts()
