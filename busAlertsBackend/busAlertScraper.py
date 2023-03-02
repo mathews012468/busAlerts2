@@ -164,11 +164,11 @@ class BusAlert:
             if self.units == Units.MINUTES:
                 secondsUntilAlertIsSent = self.number*60
                 if self.sendAlertIfBusIsClose(timeUntilBusArrives, secondsUntilAlertIsSent):
-                    break
+                    return
             else:
                 busStopsUntilAlertIsSent = self.number
                 if self.sendAlertIfBusIsClose(numberOfStopsAway, busStopsUntilAlertIsSent):
-                    break
+                    return
             
             time.sleep(15)
         #the first two arguments don't have any special significance,
