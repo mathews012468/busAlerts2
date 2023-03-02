@@ -30,6 +30,10 @@ class BusAlert:
         self.number = number
         self.units = units
 
+        #use the start time to implement a timeout feature
+        #should not be tracking a bus for more than an hour
+        self.alertStartTime = time.time()
+
     def isValidBusRoute(busRouteID):
         """
         Check if the bus route id is valid.
@@ -93,23 +97,29 @@ class BusAlert:
 
         return timeUntilBusArrives, numberOfStopsAway
 
-    def sendAlertIfBusIsClose(self, busArrivalDistance, busAlertDistance):
+    def sendAlertIfBusIsClose(self, busArrivalDistance, busAlertDistance, timeout=False):
         """
-        If the bus is close enough, send an email alerting the user.
+        If the bus is close enough, alert the user.
 
         busArrivalDistance: int
         busAlertDistance: int
+        timeout: bool
         The arguments both represent either a number of bus stops or seconds
         depending on the value of self.units.
+        timeout lets us know if the alert timed out before a bus arrived.
+        If timeout is True, let the user know they should set up another alert.
 
-        return: bool, depending on whether the email was sent
+        return: bool, depending on whether the alert was sent
         """
 
         #if bus is too far away, no email is sent
         if busArrivalDistance > busAlertDistance:
             return False
 
-        msg = f"{BusAlert.busRouteIdToCommonName(self.busRouteID)} is less than {self.number} {self.units.value} away from {BusAlert.busStopIdToCommonName(self.busStopID, self.busRouteID)}!"
+        if timeout:
+            msg = f"Unfortunately, {BusAlert.busRouteIdToCommonName(self.busRouteID)} is still more than {self.number} {self.units.value} away from {BusAlert.busStopIdToCommonName(self.busStopID, self.busRouteID)}, so we have stopped tracking it. If you would like to continue, please set up another alert."
+        else:
+            msg = f"{BusAlert.busRouteIdToCommonName(self.busRouteID)} is less than {self.number} {self.units.value} away from {BusAlert.busStopIdToCommonName(self.busStopID, self.busRouteID)}!"
         if self.recipientEmail != "":
             self.sendEmail(msg)
         if self.recipientPhone != "":
@@ -142,7 +152,8 @@ class BusAlert:
         Query the location of the nearest bus every few seconds and send
         an email if the bus gets close enough to the desired stop.
         """
-        while True:
+        HOUR = 3600
+        while time.time() - self.alertStartTime < HOUR:
             timeUntilBusArrives, numberOfStopsAway = self.getClosestBus()
             if (timeUntilBusArrives, numberOfStopsAway) == (None, None):
                 logger.info(f"In setupAlerts. No buses nearby. routeID: {self.busRouteID}, stopID: {self.busStopID}")
@@ -160,6 +171,11 @@ class BusAlert:
                     break
             
             time.sleep(15)
+        #the first two arguments don't have any special significance,
+        #except that the first number should be less than the second
+        #since that allows the rest of the function to run
+        logger.info(f"In /alert. Bus has been tracked for an hour, timeout alert will be sent. threshold: {self.number} {self.units}, routeID: {self.busRouteID}, stopID: {self.busStopID}")
+        self.sendAlertIfBusIsClose(0, 1, timeout=True)
 
     def routesMatchingSnippet(routeSnippet):
         """

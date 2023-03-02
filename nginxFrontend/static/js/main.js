@@ -1,17 +1,3 @@
-function clickedOnBusStop(busStopElement) {
-    //add the name of bus stop to the text of the element with id busStop
-    //set the name attribute of that element to the bus stop code
-    //jump to the bottom of the page where the rest of the info needs to get entered
-    chosenStopElement = document.getElementById("busStop")
-    chosenStopElement.setAttribute("name", busStopElement.id)
-    chosenStopElement.textContent = "Bus Stop: "
-    chosenStopElement.textContent += busStopElement.textContent
-
-    let busStopInputElement = document.getElementById("busStopID")
-    busStopInputElement.value = busStopElement.id
-    document.getElementById("busStop").scrollIntoView({ behavior: 'smooth' });
-}
-
 //must have at least one of the following: phone number, email address
 function hasUserProvidedContact() {
     //all of these keys come from the name attribute
@@ -27,7 +13,7 @@ function hasUserProvidedContact() {
 }
 
 function displayPossibleRoutes(possibleRoutes) {
-    possibleRouteDisplay = document.querySelector("#possible-buses")
+    let possibleRouteDisplay = document.querySelector("#possible-buses")
     //clear old data before displaying new
     possibleRouteDisplay.innerHTML = ""
     for (let i = 0; i < possibleRoutes.length; i++) {
@@ -60,12 +46,6 @@ function getPossibleRoutes() {
     })
 }
 
-function setRouteOnceClicked(routeElement) {
-    let routeInputElement = document.querySelector("#busCommonName")
-    routeInputElement.value = routeElement.textContent
-    displayPossibleRoutes([])
-}
-
 function clearPossibleRoutes() {
     let routes = document.querySelectorAll(".possible-route")
     for (let i = 0; i < routes.length; i++) {
@@ -96,7 +76,7 @@ function detectTabbingThroughRoutes(event) {
 
     //clear everything, then highlight the correct one
     clearPossibleRoutes()
-    let highlightedRoute = document.querySelector(`.possible-route:nth-child(${highlightedRouteIndex})`)
+    let highlightedRoute = document.querySelector(`a:nth-child(${highlightedRouteIndex}) .possible-route`)
     highlightedRoute.style = "background-color: gray;"
 }
 
@@ -107,27 +87,16 @@ function selectRoute(event) {
     }
 
     //set the selected bus and hide all possible routes
-    let highlightedRoute = document.querySelector(`.possible-route:nth-child(${highlightedRouteIndex})`)
+    let highlightedRoute = document.querySelector(`a:nth-child(${highlightedRouteIndex}) .possible-route`)
     let routeInputElement = document.querySelector("#busCommonName")
     routeInputElement.value = highlightedRoute.textContent
     displayPossibleRoutes([])
 }
 
-function getStopsForRouteEnter() {
-    //only move forward if user hits enter, there is text in the input
-    let routeInputElement = document.querySelector("#busCommonName")
-    if (event.key !== "Enter" || routeInputElement.value == "") {
-        return
-    }
-    
-    displayPossibleRoutes([])
-    verifyBusLine()
-}
 
 function addEventToDetectRouteEdit() {
     let routeInputElement = document.querySelector("#busCommonName")
     routeInputElement.addEventListener("input", getPossibleRoutes)
     routeInputElement.addEventListener("keydown", detectTabbingThroughRoutes)
     routeInputElement.addEventListener("keydown", selectRoute)
-    routeInputElement.addEventListener("keydown", getStopsForRouteEnter)
 }
