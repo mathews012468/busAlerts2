@@ -174,6 +174,7 @@ class BusAlert:
         #the first two arguments don't have any special significance,
         #except that the first number should be less than the second
         #since that allows the rest of the function to run
+        logger.info(f"In /alert. Bus has been tracked for an hour, timeout alert will be sent. threshold: {self.number} {self.units}, routeID: {self.busRouteID}, stopID: {self.busStopID}")
         self.sendAlertIfBusIsClose(0, 1, timeout=True)
 
     def routesMatchingSnippet(routeSnippet):
