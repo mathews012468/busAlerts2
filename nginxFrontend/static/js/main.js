@@ -93,10 +93,34 @@ function selectRoute(event) {
     displayPossibleRoutes([])
 }
 
-
 function addEventToDetectRouteEdit() {
     let routeInputElement = document.querySelector("#busCommonName")
     routeInputElement.addEventListener("input", getPossibleRoutes)
     routeInputElement.addEventListener("keydown", detectTabbingThroughRoutes)
     routeInputElement.addEventListener("keydown", selectRoute)
 }
+
+const phoneInput = document.querySelector("[name='phone']");
+
+phoneInput.addEventListener("input", () => {
+  let phone = phoneInput.value.replace(/\D/g, "");
+  let formattedPhone = "";
+  
+  if (phone.length > 10) {
+    phone = phone.substring(0, 10);
+  }
+  
+  if (phone.length > 0) {
+    formattedPhone = `(${phone.substring(0, 3)})`;
+  }
+  
+  if (phone.length > 3) {
+    formattedPhone += ` ${phone.substring(3, 6)}`;
+  }
+  
+  if (phone.length > 6) {
+    formattedPhone += `-${phone.substring(6, 10)}`;
+  }
+  
+  phoneInput.value = formattedPhone;
+});

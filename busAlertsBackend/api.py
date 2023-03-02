@@ -68,11 +68,13 @@ def setUpAlerts():
             logger.error(f"In /alert. Invalid email format. email: {email}, routeID: {busRouteID}, stopID: {busStopID}")
             return render("bad", message), 400
 
-    phoneRegex = re.compile("^\+1\d{10}$")
+    phoneRegex = re.compile("^\(\d{3}\)( )?\d{3}(-)?\d{4}$")
     if isUsingPhone and phoneRegex.match(phone) is None:
         message = "Phone number not in valid format"
         logger.error(message)
         return render("bad", message), 400
+    if isUsingPhone:
+        phone = "+1" + "".join([d for d in phone if d.isdigit()])
     
     #if user doesn't supply a unit, assume it's minutes
     try:
