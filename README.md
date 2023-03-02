@@ -7,16 +7,16 @@ docker-compose up
 
 ## TODO
 1. Make website default to https (done)
-2. SEO
+2. SEO (done, kinda)
 3. Auto recharge twilio (done)
 4. Backup certificates and prod changes to default.conf and docker-compose.yaml (done, created new branch called prod to save prod changes, backed up certificates on separate private github repo)
-5. Logging
+5. Logging (done)
 6. Auto start server when computer turns on/restarts
 7. Autocompletion suggestions for bus route (done)
 8. https strict transport security (done)
 9. Disable old versions of TLS (done)
 10. Download image locally (done)
-11. Server-side input validation
+11. Server-side input validation (done)
 12. Reject calls (done, delete webhook)
 13. Reject text messages (done, delete webhook)
 14. Add script to refresh bus info (done)
