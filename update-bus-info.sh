@@ -3,7 +3,10 @@
 set -o allexport && source .env && set +o allexport
 cd busAlertsBackend
 git checkout main
-python3 refreshBusData.py
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python refreshBusData.py
 git add .
 git commit -m "refresh bus data"
 git push 'https://'$GITUSER':'$TOKEN'@github.com/'$GITUSER'/busAlerts2.git' main
