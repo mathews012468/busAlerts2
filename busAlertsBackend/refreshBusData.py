@@ -156,13 +156,11 @@ def updateStaticMtaInfo():
     except FileExistsError:
         #either way, we're clear of the old data
         pass
-    input()
     os.mkdir("staticMtaInfo")
 
     print(os.listdir("staticMtaInfo"))
     updateBusRoutes()
     print(os.listdir("staticMtaInfo"))
-    input()
     updateBusStops()
 
 if __name__ == "__main__":
