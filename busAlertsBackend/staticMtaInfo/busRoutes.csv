@@ -94,6 +94,7 @@ MTA NYCT_D90;D Shuttle Bus - Mosholu Pkwy #4 - 205 St;D90
 MTA NYCT_B52;Downtown Brooklyn - Ridgewood;B52
 MTA NYCT_Q24;Broadway Junction - Jamaica;Q24
 MTA NYCT_S66;St. George - Port Richmond;S66
+MTA NYCT_SHUT5;St George - Eltingville;SHUT5
 MTA NYCT_Q27;Cambria Heights - Flushing;Q27
 MTA NYCT_Q26;Fresh Meadows - Flushing (Part-time);Q26
 MTA NYCT_Q28;Bayside - Flushing;Q28
@@ -118,6 +119,7 @@ MTA NYCT_B60;Williamsburg - Canarsie;B60
 MTA NYCT_SIM5;Eltingville - Lower Manhattan Express;SIM5
 MTA NYCT_SIM4;Eltingville - Lower Manhattan Express;SIM4
 MTA NYCT_B62;Downtown Brooklyn - Long Island City;B62
+MTA NYCT_L0719;L Shuttle Bus-Marcy Avenue and Lorimer Street;BEDLOOP
 MTA NYCT_SIM1C;Eltingville - Manhattan Express;SIM1C
 MTA NYCT_SIM3;Pt. Richmond - Midtown Manhattan Express;SIM3
 MTA NYCT_B61;Park Slope - Downtown Brooklyn;B61
@@ -132,30 +134,34 @@ MTA NYCT_S79+;Staten Island Mall - Bay Ridge;S79-SBS
 MTA NYCT_BX12+;Bay Plaza - Inwood;Bx12-SBS
 MTA NYCT_Q30;Little Neck or Queensborough Community College - Jamaica;Q30
 MTA NYCT_SIM24;Prince's Bay - Midtown Manhattan Express;SIM24
+MTA NYCT_OFAS;Manhattan As Assigned;OFAS
 MTA NYCT_SIM25;Tottenville - Midtown Manhattan Express;SIM25
 MTA NYCT_Q32;Jackson Heights - Penn Station;Q32
-MTA NYCT_S74;St. George - Bricktown Mall;S74
 MTA NYCT_SIM26;Tottenville - Midtown Manhattan Express;SIM26
+MTA NYCT_S74;St. George - Bricktown Mall;S74
 MTA NYCT_Q31;Bayside - Jamaica;Q31
 MTA NYCT_B54;Downtown Brooklyn - Ridgewood;B54
 MTA NYCT_B57;Gowanus - Maspeth;B57
 MTA NYCT_SIM22;Eltingville - Midtown Manhattan Express;SIM22
+MTA NYCT_D99;Stillwell Terminal - Bay 50 St;D99
 MTA NYCT_SIM23;Annadale - Midtown Manhattan Express;SIM23
+MTA NYCT_L90;L Shuttle Bus - Lorimer St - Myrtle Wyckoff Avs;L90
 MTA NYCT_L92;L Shuttle Bus - Abingdon Sq - FDR Drive;L92
 MTA NYCT_BX2;Kingsbridge Heights - Mott Haven;Bx2
-MTA NYCT_BX1;Riverdale - Mott Haven;Bx1
 MTA NYCT_B70;Dyker Heights - Sunset Park;B70
+MTA NYCT_BX1;Riverdale - Mott Haven;Bx1
 MTA NYCT_BX4;Westchester Sq - The Hub;Bx4
 MTA NYCT_X28;Sea Gate / Bensonhurst - Manhattan Express;X28
 MTA NYCT_BX3;Riverdale - George Washington Bridge;Bx3
 MTA NYCT_X27;Bay Ridge - Manhattan Express;X27
 MTA NYCT_BX6;Hunts Point - Riverside Dr;Bx6
-MTA NYCT_BX5;Pelham Bay - Gladstone Sq;Bx5
 MTA NYCT_B74;Sea Gate - Stillwell Av;B74
+MTA NYCT_BX5;Pelham Bay - Gladstone Sq;Bx5
 MTA NYCT_S86;St. George - Oakwood LTD;S86
 MTA NYCT_S89;Eltingville - Bayonne LTD;S89
 MTA NYCT_Q46;Glen Oaks - Kew Gardens;Q46
 MTA NYCT_Q48;Flushing - LaGuardia Airport;Q48
+MTA NYCT_B91A;Williamsburg Link - Loop;B91A
 MTA NYCT_S81;St. George - Grant City LTD;S81
 MTA NYCT_M116;West Side - East Harlem;M116
 MTA NYCT_Q15A;Flushing - Beechhurst / Whitestone;Q15A
@@ -163,22 +169,30 @@ MTA NYCT_Q43;Floral Park - Jamaica;Q43
 MTA NYCT_Q42;Addeslieigh Park - Jamaica;Q42
 MTA NYCT_S84;St. George - Bricktown Mall LTD;S84
 MTA NYCT_B65;Downtown Brooklyn - Crown Heights;B65
+MTA NYCT_CSAS;Queens As Assigned;CSAS
 MTA NYCT_B68;Coney Island - Windsor Terrace;B68
+MTA NYCT_S96B2;2 Shuttle Bus-149 St/Grand Concourse and Central Park West/110 St;S96B2
 MTA NYCT_B67;Brooklyn Navy Yard - Kensington;B67
+MTA NYCT_S96B1;1 Shuttle Bus-Broadway/137St and Central Park West/110 St;S96B1
 MTA NYCT_B69;Downtown Brooklyn - Kensington;B69
 MTA NYCT_M23+;Chelsea Piers - East Side;M23-SBS
 MTA NYCT_B82;Coney Island - Spring Creek Towers;B82
 MTA NYCT_X37;Bay Ridge - Midtown Manhattan Express;X37
+MTA NYCT_ENAS;Brooklyn As Assigned;ENAS
 MTA NYCT_B84;Spring Creek-New Lots;B84
 MTA NYCT_B83;Spring Creek - Broadway Junction;B83
 MTA NYCT_X38;Sea Gate / Bensonhurst - Midtown Manhattan Express;X38
+MTA NYCT_S96B3;3 Shuttle Bus-148 St/3rd Av and Central Park West/110 St;S96B3
 MTA NYCT_Q56;Broadway Junction - Jamaica;Q56
-MTA NYCT_S98;St. George - Mariners Harbor LTD;S98
 MTA NYCT_SIM33C;Mariners Harbor - Greenwich Village Express;SIM33C
+MTA NYCT_S98;St. George - Mariners Harbor LTD;S98
 MTA NYCT_Q55;Ridgewood - Richmond Hill;Q55
 MTA NYCT_Q58;Ridgewood - Flushing;Q58
 MTA NYCT_Q59;Williamsburg - Rego Park;Q59
+MTA NYCT_L1227;L Shuttle Bus-Broadway Junction and Myrtle-Wyckoff;BJ-MW
 MTA NYCT_S90;St. George - Amazon;S90
+MTA NYCT_GAAS;Brooklyn As Assigned;GAAS
+MTA NYCT_F1;CULVER LINK F Shuttle Bus-Church Avenue and McDonald Avenue;F1
 MTA NYCT_S92;St. George - Travis LTD;S92
 MTA NYCT_S91;St. George - Staten Island Mall LTD;S91
 MTA NYCT_S94;St. George - Staten Island Mall LTD;S94
@@ -194,18 +208,29 @@ MTA NYCT_M103;East Harlem - City Hall;M103
 MTA NYCT_BX9;Riverdale - West Farms Sq;Bx9
 MTA NYCT_M104;West Harlem - Times Square;M104
 MTA NYCT_M100;Inwood - Harlem;M100
+MTA NYCT_B91;Williamsburg Link - Loop;B91
 MTA NYCT_BX13;George Washington Bridge - Bronx Terminal Market;Bx13
 MTA NYCT_BX12;Pelham Bay - Inwood;Bx12
 MTA NYCT_BX11;George Washington Bridge - Parkchester;Bx11
+MTA NYCT_B92;Williamsburg Link - Loop;B92
 MTA NYCT_BX10;Riverdale - Norwood;Bx10
+MTA NYCT_SHNRD;Atlantic Av - 9 Av;SHNRD
+MTA NYCT_SIR5;St George - Grasmere;SIR5
 MTA NYCT_BX19;NY Botanical Garden - Riverbank Park;Bx19
+MTA NYCT_BX18;Morris Heights/High Bridge Circulator;Bx18
 MTA NYCT_BX17;Fordham Plaza - Port Morris;Bx17
 MTA NYCT_BX16;Pelham - Norwood;Bx16
 MTA NYCT_BX15;Fordham Plaza - The Hub;Bx15
 MTA NYCT_M14A+;Lower East Side - Abingdon Sq;M14A-SBS
 MTA NYCT_B82+;Coney Island -spring Creek Towers;B82-SBS
+MTA NYCT_GHAS;Bronx As Assigned;GHAS
+MTA NYCT_Q78;Bay Terrace - Springfield Gardens;Q78
+MTA NYCT_MQAS;Manhattan As Assigned;MQAS
 MTA NYCT_Q77;Laurelton - Jamaica;Q77
+MTA NYCT_J99;121 St Station - Jamaica Van Wyck Station;J99
+MTA NYCT_JBLAF;J/M Shuttle Bus-Broadway/Lafayette and Hewes St;JBLAF
 MTA NYCT_Q76;College Point - Jamaica;Q76
+MTA NYCT_B99;Flatbush - Midtown;B99
 MTA NYCT_J90;J Shuttle Bus - Crescent St - Jamaica Van Wyck Station;J90
 MTA NYCT_M125;Manhattanville - The Hub;M125
 MTA NYCT_BX35;George Washington Bridge-West Farms Road;Bx35
@@ -221,7 +246,9 @@ MTA NYCT_X64;Cambria Heights - Midtown Manhattan Express;X64
 MTA NYCT_BX38;Co-op City Bay Plaza - Norwood;Bx38
 MTA NYCT_X63;Rosedale - Midtown Manhattan Express;X63
 MTA NYCT_BX36;Soundview - George Washington Bridge;Bx36
+MTA NYCT_SHGRD;Grand St D Loop;SHGRD
 MTA NYCT_Q83;Cambria Heights - Jamaica;Q83
+MTA NYCT_Q82;Jamaica - Belmont Pk;Q82
 MTA NYCT_Q85;Rosedale or Green Acres Shopping Mall - Jamaica;Q85
 MTA NYCT_Q84;Laurelton - Jamaica;Q84
 MTA NYCT_BX24;Country Club - Hutchinson Metro Center;Bx24
@@ -235,9 +262,12 @@ MTA NYCT_BX28;Co-op City Section 5 - Fordham Center;Bx28
 MTA NYCT_BX27;Clasons Pt - Gladstone Sq;Bx27
 MTA NYCT_BX26;Co-op City Section 5 - Bedford Park;Bx26
 MTA NYCT_BX25;Co-op City Bay Plaza - Bedford Park;Bx25
+MTA NYCT_Q92;7 Shuttle Bus - Times Square - Hudson Yards;Q92
 MTA NYCT_M10;Harlem - Columbus Circle;M10
+MTA NYCT_Q93;7 Shuttle Bus - Queensboro Plz - Vernon Bl-Jackson Av;Q93
 MTA NYCT_M12;Midtown West - West Village;M12
 MTA NYCT_M11;Riverbank Park & Harlem - West Village;M11
+MTA NYCT_Q90;Q Shuttle Bus - Barclays Ctr - Prospect Park;Q90
 MTA NYCT_M86+;Yorkville - West Side;M86-SBS
 MTA NYCT_M21;Lower East Side - West Village;M21
 MTA NYCT_M20;Lincoln Center - South Ferry;M20
@@ -254,28 +284,38 @@ MTA NYCT_M35;Ward's Island - East Harlem;M35
 MTA NYCT_M14D+;Lower East Side - Chelsea Piers;M14D-SBS
 MTA NYCT_M60+;West Side - LaGuardia Airport;M60-SBS
 MTA NYCT_BX18A;Morris Heights/High Bridge Circulator;Bx18A
+MTA NYCT_WFAS;Bronx As Assigned;WFAS
 MTA NYCT_BX18B;Morris Heights/High Bridge Circulator;Bx18B
 MTA NYCT_Q44+;Bronx Zoo - Jamaica;Q44-SBS
 MTA NYCT_M7;Harlem - 14th Street;M7
 MTA NYCT_M8;West Village - East Village;M8
-MTA NYCT_M42;United Nations - W 42 St Pier;M42
 MTA NYCT_M9;Battery Park City - Kips Bay;M9
+MTA NYCT_M42;United Nations - W 42 St Pier;M42
 MTA NYCT_M1;Harlem - East Village;M1
 MTA NYCT_M2;Washington Heights - East Village;M2
 MTA NYCT_M3;Fort George - East Village;M3
 MTA NYCT_M4;The Cloisters - 32 St;M4
 MTA NYCT_M5;George Washington Bridge - 31 St & 6 Av;M5
+MTA NYCT_B98V;Pink Houses - Medgar Evers College;B98V
+MTA NYCT_MVAS;Manhattan As Assigned;MVAS
+MTA NYCT_M191;191 ST Shuttle Loop;M191
+MTA NYCT_M141A;9th Avenue - Avenue A;M141A
 MTA NYCT_M55;W 44 St  - South Ferry;M55
 MTA NYCT_M57;East Side - West Side;M57
 MTA NYCT_BX6+;Hunts Point - Riverside Dr;Bx6-SBS
 MTA NYCT_M50;W 42 St Pier - East Side;M50
+MTA NYCT_BX99;Woodlawn - West Village;Bx99
+MTA NYCT_EBUS;Van Wyck Bl - Jamaica Ctr;EBUS
 MTA NYCT_SIM4C;Huguenot - Manhattan Express;SIM4C
+MTA NYCT_FBAS;Brooklyn As Assigned;FBAS
 MTA NYCT_M66;East Side - Lincoln Center;M66
 MTA NYCT_SIM4X;S.I. Mall - Lower Manhattan Express;SIM4X
 MTA NYCT_B20;Ridgewood - Spring Creek;B20
 MTA NYCT_Q1;Queens Village / Bellerose - Jamaica;Q1
 MTA NYCT_Q20B;College Point - Jamaica;Q20B
 MTA NYCT_Q20A;College Point - Jamaica;Q20A
+MTA NYCT_KBAS;Bronx As Assigned;KBAS
+MTA NYCT_OHAS;Manhattan As Assigned;OHAS
 MTA NYCT_B11;Sunset Park - Midwood;B11
 MTA NYCT_B13;Spring Creek - Wyckoff Hospital;B13
 MTA NYCT_B12;Lefferts Gardens - East New York;B12
@@ -289,7 +329,9 @@ MTA NYCT_S42;St. George - Clyde Place;S42
 MTA NYCT_S44;St. George - Staten Island Mall;S44
 MTA NYCT_S46;St. George - West Shore Plaza;S46
 MTA NYCT_S48;St. George - Mariners Harbor;S48
+MTA NYCT_L0202;L Shuttle Bus-Myrtle-Wyckoff Avenue and Lorimer Street;MW-ML
 MTA NYCT_SIM35;Port Richmond - Lower Manhattan Express;SIM35
+MTA NYCT_JGAS;Brooklyn As Assigned;JGAS
 MTA NYCT_S40;St. George - Amazon;S40
 MTA NYCT_Q2;Queens Village - Jamaica;Q2
 MTA NYCT_SIM31;Eltingville - Midtown Manhattan Express;SIM31
@@ -305,6 +347,7 @@ MTA NYCT_B26;Downtown Brooklyn - Ridgewood;B26
 MTA NYCT_B25;Dwntn Bklyn & DUMBO - Broadway Junction;B25
 MTA NYCT_B44+;Sheepshead Bay - Williamsburg;B44-SBS
 MTA NYCT_SIM30;Sunnyside - Midtown Manhattan Express;SIM30
+MTA NYCT_Q110;Floral Park - Jamaica;Q110
 MTA NYCT_B42;Canarsie Pier - Rockaway Parkway Station;B42
 MTA NYCT_B41;Kings Plaza - Downtown Brooklyn;B41
 MTA NYCT_M79+;Yorkville - West Side;M79-SBS
@@ -313,8 +356,8 @@ MTA NYCT_Q12;Little Neck - Flushing;Q12
 MTA NYCT_S54;West New Brighton - Eltingville;S54
 MTA NYCT_B4;Bay Ridge - Sheepshead Bay;B4
 MTA NYCT_S53;Port Richmond - Bay Ridge;S53
-MTA NYCT_S56;Huguenot - Staten Island Mall;S56
 MTA NYCT_SIM3C;Pt. Richmond - Manhattan Express;SIM3C
+MTA NYCT_S56;Huguenot - Staten Island Mall;S56
 MTA NYCT_B6;Bath Beach - East New York;B6
 MTA NYCT_Q13;Fort Totten - Flushing;Q13
 MTA NYCT_S55;Rossville - Staten Island Mall;S55
@@ -328,12 +371,14 @@ MTA NYCT_Q17;Flushing - Jamaica;Q17
 MTA NYCT_S59;Port Richmond - Tottenville;S59
 MTA NYCT_M96;East Side - West Side;M96
 MTA NYCT_M98;Washington Heights - Upper East Side LTD;M98
+MTA NYCT_M99;W 42 St Pier - East New York;M99
 MTA NYCT_B1;Bay Ridge - Manhattan Beach;B1
 MTA NYCT_S52;St. George - Staten Island Univ. Hospital;S52
 MTA NYCT_B2;Kings Hwy Station - Kings Plaza;B2
 MTA NYCT_S51;St. George - Grant City;S51
 MTA NYCT_B32;Williamsburg - Long Island City;B32
 MTA NYCT_B35;Brownsville - Sunset Park;B35
+MTA NYCT_M90;M Shuttle Bus - Metropolitan Av - Myrtle Av;M90
 MTA NYCT_B37;Downtown Brooklyn - Bay Ridge;B37
 MTA NYCT_B36;Sheepshead Bay - Coney Island;B36
 MTA NYCT_B39;Williamsburg Bridge Plaza - Lower East Side;B39
