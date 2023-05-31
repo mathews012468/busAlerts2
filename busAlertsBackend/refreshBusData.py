@@ -85,6 +85,9 @@ def writeAllStopsForRouteFile(busRouteId):
     destinationsPath = os.path.join(routeFolder, "destinations.txt")
     with open(destinationsPath) as f:
         destinations = f.read().strip().split("\n")
+        #eliminate any empty destinations. This would happen if the route has no destinations
+        #I've seen this on shuttle buses like SHUT5, SHGRD, and SHNRD
+        destinations = [destination for destination in destinations if destination != ""]
 
     allStopsForRoutePath = os.path.join(routeFolder, "allStops.csv")
     with open(allStopsForRoutePath, "w") as f:
@@ -95,7 +98,13 @@ def writeAllStopsForRouteFile(busRouteId):
 
 def createRouteFolder(busRouteId, data):
     routeFolder = getRouteFolder(busRouteId)
-    os.mkdir(routeFolder)
+    try:
+        os.mkdir(routeFolder)
+    except FileExistsError:
+        #this is a really weird one, it looks like at least one route exists under both bus companies,
+        # NYCT and MTABC. MTA bus time website seems to say that both routes are the same, so if a route
+        # already exists just keep the original files as is and don't proceed with the rest of the code.
+        return
 
     stopGroups = data["entry"]["stopGroupings"][0]["stopGroups"]
     writeDestinationsFile(busRouteId, stopGroups)
