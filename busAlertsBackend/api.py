@@ -126,12 +126,18 @@ def displayAlertInformation():
     return render_template("setup-alert.html", routeName=routeName, stopName=stopName, routeID=routeID, stopID=stopID), 200
 
 @app.route('/getbusstops', methods=["GET"])
-def getBusStops():
+def getBusStops(api=False):
     busCommonName = request.args.get("commonName")
     if (busRouteID := bas.BusAlert.busCommonNameToRouteId(busCommonName)) == None:
         message = "Not a common name we recognize for a bus route"
         logger.error(f"In /getbusstops. Not a common name we recognize for a bus route. routeName: {busCommonName}")
-        return render("bad", message), 400
+        
+        if api:
+            return {
+                "error": message
+             }, 400
+        else:
+            return render("bad", message), 400
     #some routes have a + in their id, which gets treated as a space in url
     #to avoid that we url encode the +
     encodedRouteID = urllib.parse.quote(busRouteID)
@@ -139,7 +145,17 @@ def getBusStops():
     response = bas.BusAlert.getAllStopsOnRoute(busRouteID)
     destinations = list(response.keys())
     logger.info(f"In /getbusstops. Rendering index.html. routeName: {busCommonName}, routeID: {busRouteID}, destinations: {destinations}, not showing stops")
-    return render_template("index.html", routeName=busCommonName, routeID=encodedRouteID, destinations=destinations, stops=response), 200
+
+    if api:
+        return {
+            "routeName": busCommonName,
+            "routeID": encodedRouteID,
+            "destinations": destinations,
+            "stops": response,
+            "error": None
+        }, 200
+    else:
+        return render_template("index.html", routeName=busCommonName, routeID=encodedRouteID, destinations=destinations, stops=response), 200
 
 @app.route('/possibleroutes', methods=["GET"])
 def getPossibleRoutes():
@@ -149,3 +165,15 @@ def getPossibleRoutes():
     possibleRoutes = bas.BusAlert.routesMatchingSnippet(routeSnippet)
     logger.info(f"In /possibleroutes. routeSnippet: {routeSnippet}, possibleRoutes: {possibleRoutes}")
     return possibleRoutes, 200
+
+############################################################
+############################################################
+############################################################
+# API VERSIONS OF MOST OF THE ABOVE FUNCTIONS FOLLOW  ######
+############################################################
+############################################################
+############################################################
+
+@app.route('/api/getbusstops', methods=["GET"])
+def getBusStopsAPI():
+    return getBusStops(api=True)
