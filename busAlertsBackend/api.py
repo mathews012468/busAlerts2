@@ -111,19 +111,34 @@ def setUpAlerts():
     return render("good", message), 200
 
 @app.route('/alertinfo', methods=["GET"])
-def displayAlertInformation():
+def displayAlertInformation(api=False):
     routeID = request.args.get("routeID")
     stopID = request.args.get("stopID")
 
     if not bas.BusAlert.isValidBusStop(stopID, routeID):
         message = "Either invalid stop, invalid route, or stop doesn't belong to route."
         logger.error(f"In /alertinfo. Something wrong with stopId and/or routeID. stopID: {stopID}, routeID: {routeID}")
-        return render("bad", message), 400
+        if api:
+            return {
+                "error": message
+            }, 400
+        else:
+            return render("bad", message), 400
 
     routeName = bas.BusAlert.busRouteIdToCommonName(routeID)
     stopName = bas.BusAlert.busStopIdToCommonName(stopID, routeID)
     logger.info(f"In /alertinfo. Rendering setup-alert.html. routeName: {routeName}, stopName: {stopName}, routeID: {routeID}, stopID: {stopID}")
-    return render_template("setup-alert.html", routeName=routeName, stopName=stopName, routeID=routeID, stopID=stopID), 200
+
+    if api:
+        return {
+            "routeName": routeName,
+            "stopName": stopName,
+            "routeID": routeID,
+            "stopID": stopID,
+            "error": None
+        }, 200
+    else:
+        return render_template("setup-alert.html", routeName=routeName, stopName=stopName, routeID=routeID, stopID=stopID), 200
 
 @app.route('/getbusstops', methods=["GET"])
 def getBusStops(api=False):
@@ -173,6 +188,10 @@ def getPossibleRoutes():
 ############################################################
 ############################################################
 ############################################################
+
+@app.route('/api/alertinfo', methods=["GET"])
+def displayAlertInformationAPI():
+    return displayAlertInformation(api=True)
 
 @app.route('/api/getbusstops', methods=["GET"])
 def getBusStopsAPI():
