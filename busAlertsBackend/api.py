@@ -28,24 +28,48 @@ def render(goodOrBad, message):
 
 #message: {"busStopID":, "busRouteID":, "number": , "units": , "email": , "phone":} (number is 1-20, units is "stops" or "minutes")
 @app.route('/alert', methods=["POST"])
-def setUpAlerts():
+def setUpAlerts(api=False):
     #busStopID, busRouteID, and email are all required in order to move forward
     busStopID = request.form.get("busStopID")
     busRouteID = request.form.get("busRouteID")
     missingStopID = busStopID == "" or busStopID is None
     missingRouteID = busRouteID == "" or busRouteID is None
+    returnDict = {
+        "busStopID": busStopID,
+        "busRouteID": busRouteID,
+        "email": None,
+        "phone": None,
+        "success": False,
+        "error": None
+    }
+
     if missingRouteID or missingStopID:
         message = "One of the following necessary pieces of information is missing: the bus route (busRouteID) or the bus stop (busStopID)"
         logger.error(f"In /alert. Stop ID or Route ID missing. stopID: {busStopID}, routeID: {busRouteID}")
-        return render("bad", message), 400
+
+        if api:
+            returnDict["error"] = message
+            return returnDict, 400
+        else:
+            return render("bad", message), 400
     if not bas.BusAlert.isValidBusRoute(busRouteID):
         message = f"Not a valid route."
         logger.error(f"In /alert. Invalid routeID. routeID: {busRouteID}")
-        return render("bad", message), 400
+
+        if api:
+            returnDict["error"] = message
+            return returnDict, 400
+        else:
+            return render("bad", message), 400
     if not bas.BusAlert.isValidBusStop(busStopID, busRouteID):
         message = f"Either invalid stop or stop doesn't belong to given route."
         logger.error(f"In /alert. Either invalid stop or stop doesn't belong to route. routeID: {busRouteID}, stopID: {busStopID}")
-        return render("bad", message)
+
+        if api:
+            returnDict["error"] = message
+            return returnDict, 400
+        else:
+            return render("bad", message), 400
 
     email = request.form.get("email")
     phone = request.form.get("phone")
@@ -55,10 +79,18 @@ def setUpAlerts():
         isUsingEmail = False
     if phone == "" or phone is None:
         isUsingPhone = False
+
+    returnDict["email"] = email
+    returnDict["phone"] = phone
     if not isUsingEmail and not isUsingPhone:
         message = "Email and phone number are missing: at least one must be provided"
         logger.error(f"In /alert. Email and phone number both missing. stopID: {busStopID}, routeID: {busRouteID}")
-        return render("bad", message), 400
+
+        if api:
+            returnDict["error"] = message
+            return returnDict, 400
+        else:
+            return render("bad", message), 400
 
     if isUsingEmail:
         try:
@@ -66,13 +98,23 @@ def setUpAlerts():
         except YagInvalidEmailAddress:
             message = "Invalid email format."
             logger.error(f"In /alert. Invalid email format. email: {email}, routeID: {busRouteID}, stopID: {busStopID}")
-            return render("bad", message), 400
+
+            if api:
+                returnDict["error"] = message
+                return returnDict, 400
+            else:
+                return render("bad", message), 400
 
     phoneRegex = re.compile("^(?:\+1[-. ]?)?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$")
     if isUsingPhone and phoneRegex.match(phone) is None:
         message = "Phone number not in valid format"
         logger.error(message)
-        return render("bad", message), 400
+
+        if api:
+            returnDict["error"] = message
+            return returnDict, 400
+        else:
+            return render("bad", message), 400
     if isUsingPhone:
         phone = phone.lstrip("+1")
         phone = "+1" + "".join([d for d in phone if d.isdigit()])
@@ -94,7 +136,12 @@ def setUpAlerts():
         number = 5
     if number < 1:
         message = "The number of minutes/bus stops must be positive."
-        return render("bad", message), 400
+
+        if api:
+            returnDict["error"] = message
+            return returnDict, 400
+        else:
+            return render("bad", message), 400
 
     alertLog = f"In /alert. Ready to set up alert. Stop ID: {busStopID}, Route ID: {busRouteID}, Number: {number}, Units: {units}"
     if isUsingEmail:
@@ -108,6 +155,11 @@ def setUpAlerts():
     p.start()
 
     message = "Alert set up successfully!"
+
+    if api:
+        returnDict["error"] = None
+        returnDict["success"] = True
+        return returnDict, 200
     return render("good", message), 200
 
 @app.route('/alertinfo', methods=["GET"])
@@ -188,6 +240,10 @@ def getPossibleRoutes():
 ############################################################
 ############################################################
 ############################################################
+
+@app.route('/api/alert', methods=["POST"])
+def setUpAlertsAPI():
+    return setUpAlerts(api=True)
 
 @app.route('/api/alertinfo', methods=["GET"])
 def displayAlertInformationAPI():
