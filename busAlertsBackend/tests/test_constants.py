@@ -1,6 +1,7 @@
 BASE_URL = "http://127.0.0.1"
 ALERT_URL = f"{BASE_URL}/alert"
 API_ALERT_URL = f"{BASE_URL}/api/alert"
+ALERT_INFO_URL = f"{BASE_URL}/alertinfo"
 
 BUS_ROUTE_KEY = "busRouteID"
 BUS_STOP_KEY = "busStopID"
