@@ -120,9 +120,9 @@ class BusAlert:
             msg = f"Unfortunately, {BusAlert.busRouteIdToCommonName(self.busRouteID)} is still more than {self.number} {self.units.value} away from {BusAlert.busStopIdToCommonName(self.busStopID, self.busRouteID)}, so we have stopped tracking it. If you would like to continue, please set up another alert."
         else:
             msg = f"{BusAlert.busRouteIdToCommonName(self.busRouteID)} is less than {self.number} {self.units.value} away from {BusAlert.busStopIdToCommonName(self.busStopID, self.busRouteID)}!"
-        if self.recipientEmail != "":
+        if self.recipientEmail is not None:
             self.sendEmail(msg)
-        if self.recipientPhone != "":
+        if self.recipientPhone is not None:
             self.sendText(msg)
         return True
 

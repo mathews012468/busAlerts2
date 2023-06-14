@@ -77,8 +77,13 @@ def setUpAlerts(api=False):
     isUsingPhone = True
     if email == "" or email is None:
         isUsingEmail = False
+        #making sure the value is None makes checking for
+        # its presence a little less annoying in busAlertScraper
+        email = None
     if phone == "" or phone is None:
         isUsingPhone = False
+        #same comment as above, but applied to phone
+        phone = None
 
     returnDict["email"] = email
     returnDict["phone"] = phone
