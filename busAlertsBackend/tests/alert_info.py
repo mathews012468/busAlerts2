@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from test_constants import *
+from constants import *
 
 ERROR_MESSAGE = "Either invalid stop, invalid route, or stop doesn't belong to route."
 #overwrite the version of these variables from test_constants

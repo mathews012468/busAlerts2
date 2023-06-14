@@ -1,7 +1,7 @@
 import requests
 import json
-from test_constants import *
-from test_alerts import test_status_code
+from constants import *
+from alerts import test_status_code
 
 
 def test_response_is_json(url, data):

@@ -1,7 +1,7 @@
 #test every path through alerts route
 import requests
 from bs4 import BeautifulSoup
-from test_constants import *
+from constants import *
 
 def test_status_code(url, data, desired_status_code):
     response = requests.post(url, data=data)
