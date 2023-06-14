@@ -60,7 +60,7 @@ def test_no_data():
 
     data = {}
     error_message = MISSING_ROUTE_OR_STOP_MESSAGE
-    if not core_test_for_errors(REGULAR_URL, data=data, desired_alert_message=error_message):
+    if not core_test_for_errors(ALERT_URL, data=data, desired_alert_message=error_message):
         return False
 
     print(f"{TEST_PASSED_MESSAGE}: completed no data test\n")
@@ -72,7 +72,7 @@ def test_missing_route_id():
     #send stop but not route
     data = {BUS_STOP_KEY: VALID_STOP_ID}
     error_message = MISSING_ROUTE_OR_STOP_MESSAGE
-    if not core_test_for_errors(REGULAR_URL, data=data, desired_alert_message=error_message):
+    if not core_test_for_errors(ALERT_URL, data=data, desired_alert_message=error_message):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed missing route id test\n")
@@ -84,7 +84,7 @@ def test_missing_stop_id():
     #send route but not stop
     data = {BUS_ROUTE_KEY: VALID_ROUTE_ID}    
     error_message = MISSING_ROUTE_OR_STOP_MESSAGE
-    if not core_test_for_errors(REGULAR_URL, data=data, desired_alert_message=error_message):
+    if not core_test_for_errors(ALERT_URL, data=data, desired_alert_message=error_message):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed missing stop id test\n")
@@ -98,7 +98,7 @@ def test_invalid_route_id():
         BUS_STOP_KEY: VALID_STOP_ID
     }
     error_message = INVALID_ROUTE_MESSAGE
-    if not core_test_for_errors(REGULAR_URL, data=data, desired_alert_message=error_message):
+    if not core_test_for_errors(ALERT_URL, data=data, desired_alert_message=error_message):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed invalid route id test\n")
@@ -112,7 +112,7 @@ def test_invalid_stop_id():
         BUS_STOP_KEY: INVALID_STOP_ID
     }
     error_message = INVALID_STOP_MESSAGE
-    if not core_test_for_errors(REGULAR_URL, data=data, desired_alert_message=error_message):
+    if not core_test_for_errors(ALERT_URL, data=data, desired_alert_message=error_message):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed invalid stop id test\n")
@@ -126,7 +126,7 @@ def test_stop_not_in_route():
         BUS_STOP_KEY: WRONG_ROUTE_STOP_ID
     }
     error_message = INVALID_STOP_MESSAGE
-    if not core_test_for_errors(REGULAR_URL, data=data, desired_alert_message=error_message):
+    if not core_test_for_errors(ALERT_URL, data=data, desired_alert_message=error_message):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed stop not in route test\n")
@@ -140,7 +140,7 @@ def test_no_phone_and_email():
         BUS_STOP_KEY: VALID_STOP_ID
     }
     error_message = EMAIL_AND_PHONE_MISSING_MESSAGE
-    if not core_test_for_errors(REGULAR_URL, data=data, desired_alert_message=error_message):
+    if not core_test_for_errors(ALERT_URL, data=data, desired_alert_message=error_message):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed no phone and email test\n")
@@ -155,7 +155,7 @@ def test_invalid_email():
         EMAIL_KEY: INVALID_EMAIL
     }
     error_message = INVALID_EMAIL_MESSAGE
-    if not core_test_for_errors(REGULAR_URL, data=data, desired_alert_message=error_message):
+    if not core_test_for_errors(ALERT_URL, data=data, desired_alert_message=error_message):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed invalid email test\n")
@@ -170,7 +170,7 @@ def test_invalid_phone():
         PHONE_KEY: INVALID_PHONE
     }
     error_message = INVALID_PHONE_MESSAGE
-    if not core_test_for_errors(REGULAR_URL, data=data, desired_alert_message=error_message):
+    if not core_test_for_errors(ALERT_URL, data=data, desired_alert_message=error_message):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed invalid phone test\n")
@@ -186,7 +186,7 @@ def test_invalid_number():
         NUMBER_KEY: INVALID_NUMBER
     }
     error_message = INVALID_NUMBER_MESSAGE
-    if not core_test_for_errors(REGULAR_URL, data=data, desired_alert_message=error_message):
+    if not core_test_for_errors(ALERT_URL, data=data, desired_alert_message=error_message):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed invalid number test\n")
@@ -202,14 +202,14 @@ def test_valid_data():
         NUMBER_KEY: VALID_NUMBER
     }
     #status code
-    if not test_status_code(REGULAR_URL, data=data, desired_status_code=200):
+    if not test_status_code(ALERT_URL, data=data, desired_status_code=200):
         return False
     #alert element
-    if not test_alert_element_exists(REGULAR_URL, data=data):
+    if not test_alert_element_exists(ALERT_URL, data=data):
         return False
     #alert message
     alert_message = SUCCESS_MESSAGE
-    if not test_correct_alert_message(REGULAR_URL, data=data, desired_alert_message=alert_message):
+    if not test_correct_alert_message(ALERT_URL, data=data, desired_alert_message=alert_message):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed valid data test")

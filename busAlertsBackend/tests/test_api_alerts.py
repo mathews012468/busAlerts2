@@ -47,13 +47,13 @@ def test_no_data():
     print("Start no data test")
 
     data = {}
-    if not test_status_code(API_URL, data=data, desired_status_code=400):
+    if not test_status_code(API_ALERT_URL, data=data, desired_status_code=400):
         return False
     
-    if not test_response_is_json(API_URL, data=data):
+    if not test_response_is_json(API_ALERT_URL, data=data):
         return False
     
-    if not test_success_and_error_keys(API_URL, data=data, success=False, error=MISSING_ROUTE_OR_STOP_MESSAGE):
+    if not test_success_and_error_keys(API_ALERT_URL, data=data, success=False, error=MISSING_ROUTE_OR_STOP_MESSAGE):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed no data test\n")
@@ -65,13 +65,13 @@ def test_missing_route_id():
     data = {
         BUS_STOP_KEY: VALID_STOP_ID
     }
-    if not test_status_code(API_URL, data=data, desired_status_code=400):
+    if not test_status_code(API_ALERT_URL, data=data, desired_status_code=400):
         return False
     
-    if not test_response_is_json(API_URL, data=data):
+    if not test_response_is_json(API_ALERT_URL, data=data):
         return False
     
-    if not test_success_and_error_keys(API_URL, data=data, success=False, error=MISSING_ROUTE_OR_STOP_MESSAGE):
+    if not test_success_and_error_keys(API_ALERT_URL, data=data, success=False, error=MISSING_ROUTE_OR_STOP_MESSAGE):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed missing route id test\n")
@@ -83,13 +83,13 @@ def test_missing_stop_id():
     data = {
         BUS_ROUTE_KEY: VALID_ROUTE_ID
     }
-    if not test_status_code(API_URL, data=data, desired_status_code=400):
+    if not test_status_code(API_ALERT_URL, data=data, desired_status_code=400):
         return False
     
-    if not test_response_is_json(API_URL, data=data):
+    if not test_response_is_json(API_ALERT_URL, data=data):
         return False
     
-    if not test_success_and_error_keys(API_URL, data=data, success=False, error=MISSING_ROUTE_OR_STOP_MESSAGE):
+    if not test_success_and_error_keys(API_ALERT_URL, data=data, success=False, error=MISSING_ROUTE_OR_STOP_MESSAGE):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed missing stop id test\n")
@@ -102,13 +102,13 @@ def test_invalid_route_id():
         BUS_ROUTE_KEY: INVALID_ROUTE_ID,
         BUS_STOP_KEY: VALID_STOP_ID
     }
-    if not test_status_code(API_URL, data=data, desired_status_code=400):
+    if not test_status_code(API_ALERT_URL, data=data, desired_status_code=400):
         return False
     
-    if not test_response_is_json(API_URL, data=data):
+    if not test_response_is_json(API_ALERT_URL, data=data):
         return False
     
-    if not test_success_and_error_keys(API_URL, data=data, success=False, error=INVALID_ROUTE_MESSAGE):
+    if not test_success_and_error_keys(API_ALERT_URL, data=data, success=False, error=INVALID_ROUTE_MESSAGE):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed invalid route id test\n")
@@ -121,13 +121,13 @@ def test_invalid_stop_id():
         BUS_ROUTE_KEY: VALID_ROUTE_ID,
         BUS_STOP_KEY: INVALID_STOP_ID
     }
-    if not test_status_code(API_URL, data=data, desired_status_code=400):
+    if not test_status_code(API_ALERT_URL, data=data, desired_status_code=400):
         return False
     
-    if not test_response_is_json(API_URL, data=data):
+    if not test_response_is_json(API_ALERT_URL, data=data):
         return False
     
-    if not test_success_and_error_keys(API_URL, data=data, success=False, error=INVALID_STOP_MESSAGE):
+    if not test_success_and_error_keys(API_ALERT_URL, data=data, success=False, error=INVALID_STOP_MESSAGE):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed invalid stop id test\n")
@@ -140,13 +140,13 @@ def test_stop_not_in_route():
         BUS_ROUTE_KEY: VALID_ROUTE_ID,
         BUS_STOP_KEY: WRONG_ROUTE_STOP_ID
     }
-    if not test_status_code(API_URL, data=data, desired_status_code=400):
+    if not test_status_code(API_ALERT_URL, data=data, desired_status_code=400):
         return False
     
-    if not test_response_is_json(API_URL, data=data):
+    if not test_response_is_json(API_ALERT_URL, data=data):
         return False
     
-    if not test_success_and_error_keys(API_URL, data=data, success=False, error=INVALID_STOP_MESSAGE):
+    if not test_success_and_error_keys(API_ALERT_URL, data=data, success=False, error=INVALID_STOP_MESSAGE):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed stop not in route test\n")
@@ -159,13 +159,13 @@ def test_no_phone_and_email():
         BUS_ROUTE_KEY: VALID_ROUTE_ID,
         BUS_STOP_KEY: VALID_STOP_ID
     }
-    if not test_status_code(API_URL, data=data, desired_status_code=400):
+    if not test_status_code(API_ALERT_URL, data=data, desired_status_code=400):
         return False
     
-    if not test_response_is_json(API_URL, data=data):
+    if not test_response_is_json(API_ALERT_URL, data=data):
         return False
     
-    if not test_success_and_error_keys(API_URL, data=data, success=False, error=EMAIL_AND_PHONE_MISSING_MESSAGE):
+    if not test_success_and_error_keys(API_ALERT_URL, data=data, success=False, error=EMAIL_AND_PHONE_MISSING_MESSAGE):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed no phone and email test\n")
@@ -179,13 +179,13 @@ def test_invalid_email():
         BUS_STOP_KEY: VALID_STOP_ID,
         EMAIL_KEY: INVALID_EMAIL
     }
-    if not test_status_code(API_URL, data=data, desired_status_code=400):
+    if not test_status_code(API_ALERT_URL, data=data, desired_status_code=400):
         return False
     
-    if not test_response_is_json(API_URL, data=data):
+    if not test_response_is_json(API_ALERT_URL, data=data):
         return False
     
-    if not test_success_and_error_keys(API_URL, data=data, success=False, error=INVALID_EMAIL_MESSAGE):
+    if not test_success_and_error_keys(API_ALERT_URL, data=data, success=False, error=INVALID_EMAIL_MESSAGE):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed invalid email test\n")
@@ -199,13 +199,13 @@ def test_invalid_phone():
         BUS_STOP_KEY: VALID_STOP_ID,
         PHONE_KEY: INVALID_PHONE
     }
-    if not test_status_code(API_URL, data=data, desired_status_code=400):
+    if not test_status_code(API_ALERT_URL, data=data, desired_status_code=400):
         return False
     
-    if not test_response_is_json(API_URL, data=data):
+    if not test_response_is_json(API_ALERT_URL, data=data):
         return False
     
-    if not test_success_and_error_keys(API_URL, data=data, success=False, error=INVALID_PHONE_MESSAGE):
+    if not test_success_and_error_keys(API_ALERT_URL, data=data, success=False, error=INVALID_PHONE_MESSAGE):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed invalid phone test\n")
@@ -220,13 +220,13 @@ def test_invalid_number():
         EMAIL_KEY: VALID_EMAIL,
         NUMBER_KEY: INVALID_NUMBER
     }
-    if not test_status_code(API_URL, data=data, desired_status_code=400):
+    if not test_status_code(API_ALERT_URL, data=data, desired_status_code=400):
         return False
     
-    if not test_response_is_json(API_URL, data=data):
+    if not test_response_is_json(API_ALERT_URL, data=data):
         return False
     
-    if not test_success_and_error_keys(API_URL, data=data, success=False, error=INVALID_NUMBER_MESSAGE):
+    if not test_success_and_error_keys(API_ALERT_URL, data=data, success=False, error=INVALID_NUMBER_MESSAGE):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed invalid number test\n")
@@ -241,13 +241,13 @@ def test_valid_data():
         EMAIL_KEY: VALID_EMAIL,
         NUMBER_KEY: VALID_NUMBER
     }
-    if not test_status_code(API_URL, data=data, desired_status_code=200):
+    if not test_status_code(API_ALERT_URL, data=data, desired_status_code=200):
         return False
     
-    if not test_response_is_json(API_URL, data=data):
+    if not test_response_is_json(API_ALERT_URL, data=data):
         return False
     
-    if not test_success_and_error_keys(API_URL, data=data, success=True, error=None):
+    if not test_success_and_error_keys(API_ALERT_URL, data=data, success=True, error=None):
         return False
     
     print(f"{TEST_PASSED_MESSAGE}: completed valid data test\n")
