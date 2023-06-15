@@ -89,6 +89,13 @@ def test_valid_data():
     print(f"{TEST_PASSED_MESSAGE}: completed valid data test\n")
     return True
 
-test_no_data()
-test_invalid_bus_name()
-test_valid_data()
+def all_tests():
+    test_results = [
+        test_no_data(),
+        test_invalid_bus_name(),
+        test_valid_data()
+    ]
+    print(f"{sum(test_results)} of {len(test_results)} tests passed.")
+
+if __name__ == "__main__":
+    all_tests()
