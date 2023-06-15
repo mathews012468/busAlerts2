@@ -3,12 +3,15 @@ ALERT_URL = f"{BASE_URL}/alert"
 API_ALERT_URL = f"{BASE_URL}/api/alert"
 ALERT_INFO_URL = f"{BASE_URL}/alertinfo"
 API_ALERT_INFO_URL = f"{BASE_URL}/api/alertinfo"
+GET_BUS_STOPS_URL = f"{BASE_URL}/getbusstops"
+API_GET_BUS_STOPS_URL = f"{BASE_URL}/api/getbusstops"
 
 BUS_ROUTE_KEY = "busRouteID"
 BUS_STOP_KEY = "busStopID"
 PHONE_KEY = "phone"
 EMAIL_KEY = "email"
 NUMBER_KEY = "number"
+BUS_NAME_KEY = "commonName"
 
 TEST_NOT_PASSED_MESSAGE = "Test not passed"
 TEST_PASSED_MESSAGE = "Test passed"
@@ -34,3 +37,5 @@ VALID_PHONE = "+13474221229"
 INVALID_PHONE = "123456789"
 VALID_NUMBER = 6
 INVALID_NUMBER = -1
+VALID_BUS_NAME = "Q39"
+INVALID_BUS_NAME = "Z5000"
