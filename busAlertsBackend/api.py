@@ -203,7 +203,7 @@ def displayAlertInformation(api=False):
 @app.route('/getbusstops', methods=["GET"])
 def getBusStops(api=False):
     busCommonName = request.args.get("commonName")
-    if (busRouteID := bas.BusAlert.busCommonNameToRouteId(busCommonName)) == None:
+    if busCommonName is None or (busRouteID := bas.BusAlert.busCommonNameToRouteId(busCommonName)) is None:
         message = "Not a common name we recognize for a bus route"
         logger.error(f"In /getbusstops. Not a common name we recognize for a bus route. routeName: {busCommonName}")
         
