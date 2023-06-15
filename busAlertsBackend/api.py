@@ -172,13 +172,20 @@ def displayAlertInformation(api=False):
     routeID = request.args.get("routeID")
     stopID = request.args.get("stopID")
 
+    returnDict = {
+        "routeName": None,
+        "stopName": None,
+        "routeID": routeID,
+        "stopID": stopID,
+        "error": None
+    }
+
     if not bas.BusAlert.isValidBusStop(stopID, routeID):
         message = "Either invalid stop, invalid route, or stop doesn't belong to route."
         logger.error(f"In /alertinfo. Something wrong with stopId and/or routeID. stopID: {stopID}, routeID: {routeID}")
         if api:
-            return {
-                "error": message
-            }, 400
+            returnDict["error"] = message
+            return returnDict, 400
         else:
             return render("bad", message), 400
 
@@ -187,13 +194,9 @@ def displayAlertInformation(api=False):
     logger.info(f"In /alertinfo. Rendering setup-alert.html. routeName: {routeName}, stopName: {stopName}, routeID: {routeID}, stopID: {stopID}")
 
     if api:
-        return {
-            "routeName": routeName,
-            "stopName": stopName,
-            "routeID": routeID,
-            "stopID": stopID,
-            "error": None
-        }, 200
+        returnDict["routeName"] = routeName
+        returnDict["stopName"] = stopName
+        return returnDict, 200
     else:
         return render_template("setup-alert.html", routeName=routeName, stopName=stopName, routeID=routeID, stopID=stopID), 200
 
