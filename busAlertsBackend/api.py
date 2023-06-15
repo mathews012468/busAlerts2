@@ -203,14 +203,22 @@ def displayAlertInformation(api=False):
 @app.route('/getbusstops', methods=["GET"])
 def getBusStops(api=False):
     busCommonName = request.args.get("commonName")
+
+    returnDict = {
+        "routeName": busCommonName,
+        "routeID": None,
+        "destinations": None,
+        "stops": None,
+        "error": None
+    }
+
     if busCommonName is None or (busRouteID := bas.BusAlert.busCommonNameToRouteId(busCommonName)) is None:
         message = "Not a common name we recognize for a bus route"
         logger.error(f"In /getbusstops. Not a common name we recognize for a bus route. routeName: {busCommonName}")
         
         if api:
-            return {
-                "error": message
-             }, 400
+            returnDict["error"] = message
+            return returnDict, 400
         else:
             return render("bad", message), 400
     #some routes have a + in their id, which gets treated as a space in url
@@ -222,13 +230,10 @@ def getBusStops(api=False):
     logger.info(f"In /getbusstops. Rendering index.html. routeName: {busCommonName}, routeID: {busRouteID}, destinations: {destinations}, not showing stops")
 
     if api:
-        return {
-            "routeName": busCommonName,
-            "routeID": encodedRouteID,
-            "destinations": destinations,
-            "stops": response,
-            "error": None
-        }, 200
+        returnDict["routeID"] = encodedRouteID
+        returnDict["destinations"] = destinations
+        returnDict["stops"] = response
+        return returnDict, 200
     else:
         return render_template("index.html", routeName=busCommonName, routeID=encodedRouteID, destinations=destinations, stops=response), 200
 
