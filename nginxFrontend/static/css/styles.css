@@ -77,6 +77,10 @@ body {
     transition: all 0.2s;
 }
 
+button, input {
+    color: black;
+}
+
 .buttonstyle:hover {
     background-color: #3573CA;
 }
