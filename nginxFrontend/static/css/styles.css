@@ -155,3 +155,27 @@ input.textbox {
 .possible-route:hover {
     background-color: gray;
 }
+
+#help-popup {
+    background-color: orange;
+    width: min-content;
+}
+
+#help-popup ol {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+#help-popup section {
+  min-height: 80vh;
+}
+
+.help-image {
+    height: 80vh;
+    margin-left: -1.5rem;
+}
+
+#help-popup ol {
+    gap: 2rem;
+}
