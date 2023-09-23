@@ -93,25 +93,6 @@ function selectRoute(event) {
     displayPossibleRoutes([])
 }
 
-function openHelp() {
-    //find dialog element
-    let helpWindow = document.getElementById("help-popup")
-    helpWindow.showModal()
-
-    helpSlideshow()
-}
-
-function helpSlideshow() {
-    images = ["img/help1.png", "img/help2.png", "img/help3.png", "img/help4.png", "img/help5.png"]
-
-    let helpImage = document.querySelector("#help-page1 img")
-    for (let i = 0; i < images.length; i++) {
-        setTimeout(() => {
-            helpImage.src = images[i]
-        }, 750*i)
-    }
-}
-
 function addEventListeners() {
     let routeInputElement = document.querySelector("#busCommonName")
     routeInputElement.addEventListener("input", getPossibleRoutes)
@@ -119,5 +100,13 @@ function addEventListeners() {
     routeInputElement.addEventListener("keydown", selectRoute)
 
     let openDialogButton = document.getElementById("open-help")
-    openDialogButton.addEventListener("click", openHelp)
+    let helpWindow = document.getElementById("help-popup")
+    openDialogButton.addEventListener("click", () => { 
+        helpWindow.showModal()
+    })
+
+    let closeDialogButton = document.querySelector("#end-dialog button")
+    closeDialogButton.addEventListener("click", () => {
+        helpWindow.close()
+    })
 }

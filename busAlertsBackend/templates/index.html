@@ -20,10 +20,32 @@
   {% endif %}
   <dialog id="help-popup">
     <h2>To set up an alert:</h2>
-    <section id="help-page1">
-      <p>1. Enter your bus route and select it from the drop-down menu</p>
-      <img class="help-image" src="img/help1.png" alt="Type your bus route and select it from the menu"/>
-    </section>
+    <ol>
+      <li>
+        <section>
+          <p>Write the name of your bus route, then select it from the dropdown menu or press 'Submit'.</p>
+          <img class="help-image" src="img/help1.png" alt="Type your bus route and select it from the menu"/>
+        </section>
+      </li>
+      <li>
+        <section>
+          <p>Select your bus stop. Stops are organized by destination, so you may need to scroll down a bit to find your stop.</p>
+          <img class="help-image" src="img/help2.png" alt="Select your bus stop"/>
+        </section>
+      </li>
+      <li>
+        <section>
+          <p>Enter your alert information.</p>
+          <p>You can specify the alert time by minutes or bus stops. For example, you can set up an alert for when the bus is less than 4 minutes away or less than 6 stops away. Select 'minutes' or 'bus stops' to change the units.</p>
+          <p>Provide your phone number to receive a text or your email address to receive an email.</p>
+          <p>Press 'Set up alert'.</p>
+          <img class="help-image" src="img/help3.png" alt="Specify when you want to receive the alert and provide contact information"/>
+        </section>
+      </li>
+    </ol>
+    <div id="end-dialog">
+      <button>Close</button>
+    </div>
   </dialog>
   <header>
     <h1>MTA Bus Alerts</h1>
