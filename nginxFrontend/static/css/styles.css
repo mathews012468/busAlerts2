@@ -12,6 +12,15 @@ body {
     align-items: center;
 }
 
+#open-help {
+    position: fixed;
+    top: 0.25rem;
+    right: 0.5rem;
+    height: 2rem;
+    font-size: 1rem;
+    padding: 0 1.2em;
+}
+
 #alert {
     position: fixed;
     text-align: center;
