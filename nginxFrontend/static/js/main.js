@@ -93,8 +93,23 @@ function selectRoute(event) {
     displayPossibleRoutes([])
 }
 
-function addEventToDetectRouteEdit() {
+function addEventListeners() {
+    let openDialogButton = document.getElementById("open-help")
+    let helpWindow = document.getElementById("help-popup")
+    openDialogButton.addEventListener("click", () => { 
+        helpWindow.showModal()
+    })
+
+    let closeDialogButton = document.querySelector("#end-dialog button")
+    closeDialogButton.addEventListener("click", () => {
+        helpWindow.close()
+    })
+
     let routeInputElement = document.querySelector("#busCommonName")
+    if (routeInputElement === null) {
+        return
+    }
+
     routeInputElement.addEventListener("input", getPossibleRoutes)
     routeInputElement.addEventListener("keydown", detectTabbingThroughRoutes)
     routeInputElement.addEventListener("keydown", selectRoute)

@@ -12,6 +12,18 @@ body {
     align-items: center;
 }
 
+#open-help {
+    position: fixed;
+    top: 0.25rem;
+    right: 0.5rem;
+    height: 2rem;
+    font-size: 1rem;
+    padding: 0 1.2em;
+
+    /* to avoid help button being covered by another element */
+    z-index: 100;
+}
+
 #alert {
     position: fixed;
     text-align: center;
@@ -154,4 +166,45 @@ input.textbox {
 
 .possible-route:hover {
     background-color: gray;
+}
+
+#help-popup {
+    background-color: var(--main-text-color, orange);
+    width: min-content;
+    overflow-x: hidden;
+}
+
+#help-popup ol {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.help-image {
+    height: 80vh;
+    margin-left: -1.5rem;
+}
+
+#help-popup ol {
+    gap: 2rem;
+}
+
+#end-dialog {
+    position: sticky;
+    width: 120%;
+    bottom: -1rem;
+    margin-left: -1rem;
+    background-color: var(--main-text-color, orange);
+    height: 3rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#end-dialog button {
+    margin-left: -2rem;
+    margin-top: 0.5rem;
+    width: 8rem;
+    height: 2rem;
 }
