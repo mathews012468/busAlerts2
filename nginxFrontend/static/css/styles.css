@@ -19,6 +19,9 @@ body {
     height: 2rem;
     font-size: 1rem;
     padding: 0 1.2em;
+
+    /* to avoid help button being covered by another element */
+    z-index: 100;
 }
 
 #alert {

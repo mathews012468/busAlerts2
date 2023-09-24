@@ -94,11 +94,6 @@ function selectRoute(event) {
 }
 
 function addEventListeners() {
-    let routeInputElement = document.querySelector("#busCommonName")
-    routeInputElement.addEventListener("input", getPossibleRoutes)
-    routeInputElement.addEventListener("keydown", detectTabbingThroughRoutes)
-    routeInputElement.addEventListener("keydown", selectRoute)
-
     let openDialogButton = document.getElementById("open-help")
     let helpWindow = document.getElementById("help-popup")
     openDialogButton.addEventListener("click", () => { 
@@ -109,4 +104,13 @@ function addEventListeners() {
     closeDialogButton.addEventListener("click", () => {
         helpWindow.close()
     })
+
+    let routeInputElement = document.querySelector("#busCommonName")
+    if (routeInputElement === null) {
+        return
+    }
+
+    routeInputElement.addEventListener("input", getPossibleRoutes)
+    routeInputElement.addEventListener("keydown", detectTabbingThroughRoutes)
+    routeInputElement.addEventListener("keydown", selectRoute)
 }
