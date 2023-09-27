@@ -93,12 +93,50 @@ function selectRoute(event) {
     displayPossibleRoutes([])
 }
 
+let helpPopup = document.getElementById("help-popup")
+let firstHelp = document.querySelector("#help-popup li:nth-child(1)")
+let secondHelp = document.querySelector("#help-popup li:nth-child(2)")
+let thirdHelp = document.querySelector("#help-popup li:nth-child(3)")
+function scrollUp() {
+    let helpPopupY = helpPopup.getBoundingClientRect().y
+    let secondY = secondHelp.getBoundingClientRect().y
+    let thirdY = thirdHelp.getBoundingClientRect().y
+
+    if (secondY >= helpPopupY) {
+        firstHelp.scrollIntoView()
+    } else if (thirdY >= helpPopupY) {
+        secondHelp.scrollIntoView()
+    } else {
+        thirdHelp.scrollIntoView()
+    }
+}
+function scrollDown() {
+    let helpPopupY = helpPopup.getBoundingClientRect().y
+    let firstY = firstHelp.getBoundingClientRect().y
+    let secondY = secondHelp.getBoundingClientRect().y
+
+    //the padding allows the down button to move to the next step instead of staying on the same one
+    let padding = 10
+    if (firstY > helpPopupY + padding) {
+        firstHelp.scrollIntoView()
+    } else if (secondY > helpPopupY + padding) {
+        secondHelp.scrollIntoView()
+    } else {
+        thirdHelp.scrollIntoView()
+    }
+}
+
 function addEventListeners() {
     let openDialogButton = document.getElementById("open-help")
     let helpWindow = document.getElementById("help-popup")
     openDialogButton.addEventListener("click", () => { 
         helpWindow.showModal()
     })
+
+    let upButton = document.getElementById("up")
+    upButton.addEventListener("click", scrollUp)
+    let downButton = document.getElementById("down")
+    downButton.addEventListener("click", scrollDown)
 
     let closeDialogButton = document.querySelector("#end-dialog button")
     closeDialogButton.addEventListener("click", () => {
