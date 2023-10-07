@@ -166,8 +166,10 @@ function addEventListeners() {
 
     let upButton = document.getElementById("up")
     upButton.addEventListener("click", scrollUp)
+    upButton.addEventListener("dblclick", (e) => {e.preventDefault()})
     let downButton = document.getElementById("down")
     downButton.addEventListener("click", scrollDown)
+    downButton.addEventListener("dblclick", (e) => {e.preventDefault()})
     setInterval(enableOrDisableUpDownButtons, 500)
 
     let closeDialogButton = document.querySelector("#end-dialog button")
