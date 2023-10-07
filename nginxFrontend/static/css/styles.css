@@ -12,6 +12,17 @@ body {
     align-items: center;
 }
 
+#help-popup::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+#help-popup::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
 #open-help {
     position: fixed;
     top: 0.25rem;
@@ -197,14 +208,15 @@ input.textbox {
     background-color: var(--main-text-color, orange);
     height: 3rem;
 
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
 }
 
-#end-dialog button {
+#end-dialog button#close {
     margin-left: -2rem;
-    margin-top: 0.5rem;
     width: 8rem;
     height: 2rem;
+
+    grid-column: 2 / 3;
 }

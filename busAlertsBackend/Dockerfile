@@ -1,4 +1,5 @@
-FROM python:3
+#for some reason uwsgi and lxml refuse to build for 3.11
+FROM python:3.10
 
 WORKDIR /app
 
