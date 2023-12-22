@@ -152,6 +152,13 @@ class BusAlert:
         Query the location of the nearest bus every few seconds and send
         an email if the bus gets close enough to the desired stop.
         """
+        #send initial text letting user know their alert is in the works
+        msg = f"Now tracking {BusAlert.busRouteIdToCommonName(self.busRouteID)} at {BusAlert.busStopIdToCommonName(self.busStopID, self.busRouteID)}. Will send alert when bus is {self.number} {self.units.value} away."
+        if self.recipientEmail is not None:
+            self.sendEmail(msg)
+        if self.recipientPhone is not None:
+            self.sendText(msg)
+
         HOUR = 3600
         while time.time() - self.alertStartTime < HOUR:
             timeUntilBusArrives, numberOfStopsAway = self.getClosestBus()
